@@ -23,7 +23,7 @@ const App = () => {
       {currentPage === 'LoginForm' && <LoginForm goToRegistration={goToRegistration} goToForm={goToForm} />}
       {currentPage === 'RegistrationForm' && <RegistrationForm goToLogin={goToLogin} />}
       {currentPage === 'Form' && <Form />}
-      {/* <PageFoot/> */}
+      <PageFoot/>
     </div>
   );
 };

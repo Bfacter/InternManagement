@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./RegistrationStyle.css";
+// import ReCAPTCHA from "react-google-recaptcha";
+
 import {
   isFNameValid,
   isEmailValid,
@@ -8,6 +10,10 @@ import {
   isPasswordValid,
 } from "../utils/typeCheckUtil";
 const RegistrationForm = ({goToLogin}) => {
+  const [recaptchaResponse, setRecaptchaResponse] = useState("");
+  const handleRecaptchaChange = (response) => {
+    setRecaptchaResponse(response);
+  };
 
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [formData, setFormData] = useState({
@@ -93,6 +99,10 @@ const RegistrationForm = ({goToLogin}) => {
     }
     if(!isFNameValid(formData.Fname)){
       window.alert("Name must be in correct format.");
+      return;
+    }
+    if (!recaptchaResponse) {
+      window.alert("Please complete the CAPTCHA.");
       return;
     }
     try {
@@ -205,6 +215,8 @@ const RegistrationForm = ({goToLogin}) => {
               required
             />
           </div>
+          <div className="g-recaptcha" data-sitekey="6LesIJonAAAAAHhvEU8s-VsQFL-uNEXAAZt6YEBK" onChange={handleRecaptchaChange}></div>
+
           <div className="buttonflex">
             <div className="ptext"><p>Already registered? <button onClick={goToLogin}>Login here</button></p></div>
             <button class="register-button" type="submit"  >Register</button>

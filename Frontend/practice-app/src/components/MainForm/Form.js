@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
+import "./FormStyle.css";
 
 const Form = () => {
   const[previewMode,setPreviewMode]=useState(false);
@@ -115,28 +116,31 @@ const Form = () => {
   };
 
   return (
-    <div>
-      <h1>Form</h1>
+    <div className="main-outer-div">
+      <div className="heading">
+        <h1 className="headingtext">Application form for Internship in Niti Aayog</h1>
+      </div>
       <form onSubmit={handleSubmit}>
-        <div>
+      <div className="field-container">
+        <div className="field">
           <label>Title:</label>
           {previewMode ? (
             <span>{formData.title}</span>
           ) : (
-          <select name="title" onChange={handleChange} value={formData.title}>
-            <option value="Mr">Mr</option>
-            <option value="Mrs">Mrs</option>
-            <option value="Ms">Ms</option>
-            <option value="Dr">Dr</option>
+          <select class="def_input title-option" name="title" onChange={handleChange} value={formData.title} >
+            <option value="Mr">Mr.</option>
+            <option value="Mrs">Mrs.</option>
+            <option value="Ms">Ms.</option>
+            <option value="Dr">Dr.</option>
           </select>
           )}
         </div>
-        <div>
+        <div className="field">
           <label>First Name:</label>
           {previewMode ? (
             <span>{formData.firstName}</span>
           ) : (
-            <input
+            <input class="def_input"
               type="text"
               name="firstName"
               onChange={handleChange}
@@ -145,26 +149,14 @@ const Form = () => {
             />
           )}
         </div>
-        <div>
-          <label>Father's Name:</label>
-          {previewMode ? (
-            <span>{formData.fathersname}</span>
-          ) : (
-            <input
-              type="text"
-              name="fatherName"
-              onChange={handleChange}
-              value={formData.fatherName}
-              required
-            />
-          )}
-        </div>
-        <div>
+      </div>    
+      <div className="field-container">
+       <div className="field">
           <label>Date of Birth:</label>
           {previewMode ? (
             <span>{formData.dob}</span>
           ) : (
-            <input
+            <input class="def_input"
               type="date"
               name="dob"
               onChange={dobHandleChange}
@@ -173,109 +165,12 @@ const Form = () => {
             />
           )}
         </div>
-        <div>
-          <label>Address Line 1:</label>
-          {previewMode ? (
-            <span>{formData.address1}</span>
-          ) : (
-            <input
-              type="text"
-              name="address1"
-              onChange={newHandleChange}
-              value={formData.address1}
-              required
-            />
-          )}
-        </div>
-        <div>
-          <label>Address Line 2:</label>
-          {previewMode ? (
-            <span>{formData.address2}</span>
-          ) : (
-            <input
-              type="text"
-              name="address2"
-              onChange={newHandleChange}
-              value={formData.address2}
-            />
-          )}
-        </div>
-        <div>
-          <label>City:</label>
-          {previewMode ? (
-            <span>{formData.city}</span>
-          ) : (
-            <input
-              type="text"
-              name="city"
-              onChange={handleChange}
-              value={formData.city}
-              required
-            />
-          )}
-        </div>
-        <div>
-          <label>Country:</label>
-          {previewMode ? (
-            <span>{formData.country}</span>
-          ) : (
-            <input
-              type="text"
-              name="country"
-              onChange={handleChange}
-              value={formData.country}
-              required
-            />
-          )}
-        </div>
-        <div>
-          <label>Pincode:</label>
-          {previewMode ? (
-            <span>{formData.pincode}</span>
-          ) : (
-            <input
-              type="text"
-              name="pincode"
-              onChange={pincodeHandleChange}
-              value={formData.pincode}
-              required
-            />
-          )}
-        </div>
-        <div>
-        <label>Phone No:</label>
-        {previewMode ? (
-          <span>{formData.phone}</span>
-        ) : (
-          <PhoneInput
-            name="phone"
-            country={"in"}
-            onChange={handlePhoneChange}
-            value={formData.phone}
-            required
-          />
-        )}
-      </div>
-      <div>
-        <label>Mobile No:</label>
-        {previewMode ? (
-          <span>{formData.mobile}</span>
-        ) : (
-          <PhoneInput
-            name="mobile"
-            country={"in"}
-            onChange={handleMobileChange}
-            value={formData.mobile}
-            required
-          />
-        )}
-      </div>
-        <div>
+       <div className="field">
           <label>Email:</label>
           {previewMode ? (
             <span>{formData.email}</span>
           ) : (
-            <input
+            <input class="def_input"
               type="email"
               name="email"
               onChange={emailHandleChange}
@@ -284,7 +179,126 @@ const Form = () => {
             />
           )}
         </div>
-        <div>
+      </div>
+        <div className="field">
+          <label>Father's Name:</label>
+          {previewMode ? (
+            <span>{formData.fathersname}</span>
+          ) : (
+            <input class="def_input"
+              type="text"
+              name="fatherName"
+              onChange={handleChange}
+              value={formData.fatherName}
+              required
+            />
+          )}
+        </div>
+      <div className="field-container">  
+        <div className="field">
+          <label>Address Line 1:</label>
+          {previewMode ? (
+            <span>{formData.address1}</span>
+          ) : (
+            <input class="def_input"
+              type="text"
+              name="address1"
+              onChange={newHandleChange}
+              value={formData.address1}
+              required
+            />
+          )}
+        </div>
+        <div className="field">
+          <label>Address Line 2:</label>
+          {previewMode ? (
+            <span>{formData.address2}</span>
+          ) : (
+            <input class="def_input"
+              type="text"
+              name="address2"
+              onChange={newHandleChange}
+              value={formData.address2}
+            />
+          )}
+        </div>
+      </div>  
+      <div className="field-container"> 
+        <div className="field">
+          <label>City:</label>
+          {previewMode ? (
+            <span>{formData.city}</span>
+          ) : (
+            <input class="def_input"
+              type="text"
+              name="city"
+              onChange={handleChange}
+              value={formData.city}
+              required
+            />
+          )}
+        </div>
+        <div className="field" >
+          <label>Country:</label>
+          {previewMode ? (
+            <span>{formData.country}</span>
+          ) : (
+            <input class="def_input"
+              type="text"
+              name="country"
+              onChange={handleChange}
+              value={formData.country}
+              required
+            />
+          )}
+        </div>
+        <div className="field">
+          <label>Pincode:</label>
+          {previewMode ? (
+            <span>{formData.pincode}</span>
+          ) : (
+            <input class="def_input"
+              type="text"
+              name="pincode"
+              onChange={pincodeHandleChange}
+              value={formData.pincode}
+              required
+            />
+          )}
+        </div>
+      </div>
+      <div className="field-container"> 
+      {/* flex ka main div hai field-container uske andar field classname mein jo bhi dega vo ek line m aajayega */}
+        <div className="field">
+        <label>Phone No:</label>
+        {previewMode ? (
+          <span>{formData.phone}</span>
+        ) : (
+          <PhoneInput class="def_input"
+            name="phone"
+            country={"in"}
+            onChange={handlePhoneChange}
+            value={formData.phone}
+            required
+          />
+        )}
+      </div>
+      <div className="field">
+        <label>Mobile No:</label>
+        {previewMode ? (
+          <span>{formData.mobile}</span>
+        ) : (
+          <PhoneInput class="def_input"
+            name="mobile"
+            country={"in"}
+            onChange={handleMobileChange}
+            value={formData.mobile}
+            required
+          />
+        )}
+      </div>
+      </div>
+        <div className="field"v>
         <label>Upload Resume:</label>
         <input
           type="file"
@@ -296,17 +310,17 @@ const Form = () => {
         {fileError && <p style={{ color: "red" }}>{fileError}</p>}
       </div>
         {previewMode ? (
-          <button type="button" onClick={handlePreview}>
+          <button className="field form-button" type="button" onClick={handlePreview}>
             Edit
           </button>
         ) : (
-          <button type="button" onClick={handlePreview}>
+          <button type="button" className="field form-button" onClick={handlePreview}>
             Preview
           </button>
         )}
         {!previewMode && (
           <div>
-            <button type="submit">Submit</button>
+            <button className="field form-button" type="submit">Submit</button>
           </div>
         )}
       </form>
