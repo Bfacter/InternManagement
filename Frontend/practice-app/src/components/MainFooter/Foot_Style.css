@@ -1,0 +1,73 @@
+.footer {
+    background-color: transparent;
+    height: 140px;
+    top: 940px;
+    width: 1926px;
+    bottom: 0;
+  }
+.footergroup {
+    background-color: #3b5998;
+    height: 100px;
+    width: 100%;
+    margin-top: 15px;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right:0;
+    /* position: relative;
+    bottom: 0;
+    left: 0; */
+  }
+  .NITI-aayog {
+    color: #ffffff;
+    font-family: "Brawler-Regular", Helvetica;
+    font-size: 20px;
+    font-weight: 400;
+    height: 48px;
+    left: 113px;
+    letter-spacing: 0;
+    line-height: normal;
+    text-align: center;
+    top: 47px;
+    width: 770px;
+    border-right: #ffffff solid 2px;
+    /* margin-left :5%; */
+  } 
+.for-any-feedback {
+    color: #ffffff;
+    font-family: "Bitter-Regular", Helvetica;
+    font-size: 16px;
+    font-weight: 400;
+    height: 38px;
+    left: 999px;
+    letter-spacing: 0;
+    line-height: normal;
+    text-align: center;
+    top: 51px;
+    width: 372px;
+  }
+  
+.for-website-related {
+    color: #ffffff;
+    font-family: "Bitter-Regular", Helvetica;
+    font-size: 16px;
+    font-weight: 400;
+    height: 38px;
+    left: 1481px;
+    letter-spacing: 0;
+    line-height: normal;
+    text-align: center;
+    top: 51px;
+  }
+  .alltext{
+    width:80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1%;
+    display: flex;
+    align-items: center;
+    bottom: 0;
+    left: 0;
+    right:0;
+  }

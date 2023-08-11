@@ -1,0 +1,98 @@
+.MainPage{
+    margin-top: 10px;
+    width:80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.heading {
+    background-color: #3b5998;
+    border-radius: 46px;
+    box-shadow: 0px 4px 19px 2px #00000080;
+    left: 0;
+    top: 0;
+    bottom: 0;
+  }
+  
+.headingtext{
+    color: #ffffff;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    text-align: center;
+    padding: 0.7%;
+  } 
+.reg_form{
+    width:80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: -10px;
+    height:600px;
+  }
+  .def_input{
+    width: 200px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none; 
+  }
+  .def_input:focus {
+    border-color: #007bff; 
+    box-shadow: 0 0 5px #007bff;
+  }
+  
+  .def_input::placeholder {
+    color: #999; 
+  }
+  .def_input:disabled {
+    background-color: #f2f2f2; 
+    color: #777; 
+  }
+  #Email{
+    width:25%;
+  }
+  #Fname, #Dob, #Email, #password, #confirmPassword{
+    margin-top: 3%;
+  }
+  label{
+    font-size:x-large;
+  }
+  .register-button {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: #3b5998;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease-in-out;
+  }
+  .register-button:hover {
+    background-color: #304e87;
+  }
+  .buttonflex{
+    display: flex;
+    width:80%;
+    height: 10%;
+    margin: auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* height: 100vh; */
+    max-height: fit-content;
+    margin-top: 80px;
+    margin-bottom: 80px;
+  }
+  
+  .buttonflex p {
+    margin-bottom: 10px; 
+  }
+  form{
+    height:50%;
+  }
+  
+  
+  
