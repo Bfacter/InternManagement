@@ -75,6 +75,10 @@ const RegistrationForm = ({goToLogin}) => {
       window.alert("You must be 18 years old or above to register");
       return;
     }
+    if(!(formData.password===formData.confirmPassword)){
+      window.alert("Password and confirm password dont match");
+      return;
+    }
 
     // If the password is not valid, show an alert or set an error message
     if (!isPasswordValid(formData.password)) {
@@ -85,6 +89,10 @@ const RegistrationForm = ({goToLogin}) => {
     }
     if (!isEmailValid(formData.Email)) {
       window.alert("Email must be in correct format.");
+      return;
+    }
+    if(!isFNameValid(formData.Fname)){
+      window.alert("Name must be in correct format.");
       return;
     }
     try {
@@ -153,7 +161,7 @@ const RegistrationForm = ({goToLogin}) => {
               name="Email"
               value={formData.Email}
               onChange={handleChange}
-              onChangeCapture={handleEmailChange}
+              onBlur={handleEmailChange}
               required
             />
             {!emailValid && (

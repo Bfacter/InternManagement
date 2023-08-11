@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 const Form = () => {
-
+  const[previewMode,setPreviewMode]=useState(false);
+  const [fileError, setFileError] = useState("");
   const[formData,setFormData]=useState({
     title:"",
     fname:"",
-    mname:"",
-    lname:"",
     fathersname:"",
     dob:"",
     address1:"",
@@ -17,29 +18,85 @@ const Form = () => {
     pincode:"",
     phone:"",
     mobile:"",
-    email:""
-
+    email:"",
+    resume:null
   })
+
   const handleChange=(e)=>{
+    const{name,value}=e.target;
+    const newValue = value.replace(/[^a-zA-Z]/g, '');
+    setFormData({
+        ...formData,
+        [name]:newValue,
+    })
+  }
+  const newHandleChange = (event) => {
+    const { name, value } = event.target;
+    const newValue = value.replace(/[^a-zA-Z0-9-/,]/g, '');
+    setFormData({
+      ...formData,
+      [name]: newValue,
+    });
+  };
+  const pincodeHandleChange = (event) => {
+    const { name, value } = event.target;
+    const newValue = value.replace(/\D/g, '').substring(0, 6);
+    setFormData({
+      ...formData,
+      [name]: newValue,
+    });
+  };
+  const handlePhoneChange = (value) => {
+    setFormData({
+      ...formData,
+      phone: value,
+    });
+  };
+
+  const handleMobileChange = (value) => {
+    setFormData({
+      ...formData,
+      mobile: value,
+    });
+  };
+  
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    const allowedTypes = ["application/pdf"];
+    const allowedSize = 1 * 1024 * 1024; // 1 MB
+
+    if (file) {
+      if (allowedTypes.includes(file.type) && file.size <= allowedSize) {
+        setFormData({
+          ...formData,
+          resume: file,
+        });
+        setFileError(""); // Clear any previous errors
+      } else {
+        setFileError("Invalid file format or size. Please choose a PDF file of up to 1 MB.");
+      }
+    }
+  };
+  const dobHandleChange=(e)=>{
     const{name,value}=e.target;
     setFormData({
         ...formData,
         [name]:value,
+    }) 
+  }
+  const emailHandleChange=(e)=>{
+    const { name, value } = e.target;
+      
+        setFormData({
+          ...formData,
+          [name]: value,
+        
     })
   }
-  const[previewMode,setPreviewMode]=useState(false);
-  const handleFileChange =(e)=>{
-    setFormData({
-        ...formData,
-        resume: e.target.files[0],
-    }); 
-  };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Create a FormData object to send files with other form data
       const formDataToSend = new FormData();
       for (let key in formData) {
         formDataToSend.append(key, formData[key]);
@@ -63,10 +120,16 @@ const Form = () => {
       <form onSubmit={handleSubmit}>
         <div>
           <label>Title:</label>
+          {previewMode ? (
+            <span>{formData.title}</span>
+          ) : (
           <select name="title" onChange={handleChange} value={formData.title}>
             <option value="Mr">Mr</option>
             <option value="Mrs">Mrs</option>
+            <option value="Ms">Ms</option>
+            <option value="Dr">Dr</option>
           </select>
+          )}
         </div>
         <div>
           <label>First Name:</label>
@@ -83,36 +146,9 @@ const Form = () => {
           )}
         </div>
         <div>
-          <label>Middle Name:</label>
-          {previewMode ? (
-            <span>{formData.middleName}</span>
-          ) : (
-            <input
-              type="text"
-              name="middleName"
-              onChange={handleChange}
-              value={formData.middleName}
-            />
-          )}
-        </div>
-        <div>
-          <label>Last Name:</label>
-          {previewMode ? (
-            <span>{formData.lastName}</span>
-          ) : (
-            <input
-              type="text"
-              name="lastName"
-              onChange={handleChange}
-              value={formData.lastName}
-              required
-            />
-          )}
-        </div>
-        <div>
           <label>Father's Name:</label>
           {previewMode ? (
-            <span>{formData.fatherName}</span>
+            <span>{formData.fathersname}</span>
           ) : (
             <input
               type="text"
@@ -131,7 +167,7 @@ const Form = () => {
             <input
               type="date"
               name="dob"
-              onChange={handleChange}
+              onChange={dobHandleChange}
               value={formData.dob}
               required
             />
@@ -145,7 +181,7 @@ const Form = () => {
             <input
               type="text"
               name="address1"
-              onChange={handleChange}
+              onChange={newHandleChange}
               value={formData.address1}
               required
             />
@@ -159,7 +195,7 @@ const Form = () => {
             <input
               type="text"
               name="address2"
-              onChange={handleChange}
+              onChange={newHandleChange}
               value={formData.address2}
             />
           )}
@@ -200,40 +236,40 @@ const Form = () => {
             <input
               type="text"
               name="pincode"
-              onChange={handleChange}
+              onChange={pincodeHandleChange}
               value={formData.pincode}
               required
             />
           )}
         </div>
         <div>
-          <label>Phone No:</label>
-          {previewMode ? (
-            <span>{formData.phone}</span>
-          ) : (
-            <input
-              type="text"
-              name="phone"
-              onChange={handleChange}
-              value={formData.phone}
-              required
-            />
-          )}
-        </div>
-        <div>
-          <label>Mobile No:</label>
-          {previewMode ? (
-            <span>{formData.mobile}</span>
-          ) : (
-            <input
-              type="text"
-              name="mobile"
-              onChange={handleChange}
-              value={formData.mobile}
-              required
-            />
-          )}
-        </div>
+        <label>Phone No:</label>
+        {previewMode ? (
+          <span>{formData.phone}</span>
+        ) : (
+          <PhoneInput
+            name="phone"
+            country={"in"}
+            onChange={handlePhoneChange}
+            value={formData.phone}
+            required
+          />
+        )}
+      </div>
+      <div>
+        <label>Mobile No:</label>
+        {previewMode ? (
+          <span>{formData.mobile}</span>
+        ) : (
+          <PhoneInput
+            name="mobile"
+            country={"in"}
+            onChange={handleMobileChange}
+            value={formData.mobile}
+            required
+          />
+        )}
+      </div>
         <div>
           <label>Email:</label>
           {previewMode ? (
@@ -242,22 +278,23 @@ const Form = () => {
             <input
               type="email"
               name="email"
-              onChange={handleChange}
+              onChange={emailHandleChange}
               value={formData.email}
               required
             />
           )}
         </div>
         <div>
-          <label>Upload Resume:</label>
-          <input
-            type="file"
-            name="resume"
-            onChange={handleFileChange}
-            accept=".pdf,.doc,.docx"
-            required
-          />
-        </div>
+        <label>Upload Resume:</label>
+        <input
+          type="file"
+          name="resume"
+          onChange={handleFileChange}
+          accept=".pdf"
+          required
+        />
+        {fileError && <p style={{ color: "red" }}>{fileError}</p>}
+      </div>
         {previewMode ? (
           <button type="button" onClick={handlePreview}>
             Edit
