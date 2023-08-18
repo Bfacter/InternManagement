@@ -17,8 +17,10 @@ app.use(bodyParser.json());
      
 app.use('/register', registrationRoutes);
 app.use('/login', loginRoute);
-app.use('/form/:RID',formgetRoute);
+app.use('/form', formgetRoute);
 app.use('/form/post', formpostRoute);
+
+
 connectDB().then(()=>{
   console.log("connectedDB");
   app.listen(port, () => {

@@ -5,15 +5,13 @@ import 'react-phone-input-2/lib/style.css';
 import "./FormStyle.css";
 
 const Form = ({RID}) => {
-  const [candidateData, setCandidateData] = useState(null);
+  const [candidateData, setCandidateData] = useState({});
   const[previewMode,setPreviewMode]=useState(false);
   const [fileError, setFileError] = useState("");
   const[formData,setFormData]=useState({
-    RID:RID,
+    RID:10,
     title:"",
-    fname:"",
     fathersname:"",
-    dob:"",
     address1:"",
     address2:"",
     city:"",
@@ -21,42 +19,32 @@ const Form = ({RID}) => {
     pincode:"",
     phone:"",
     mobile:"",
-    email:"",
-    resume:null
+    resume:""
   })
   useEffect(() => {
     if (RID) {
-      fetchCandidateData(RID)
-        .then((data) => {
-          setCandidateData(data.candidate);
-          console.log(candidateData);
-        })
-        .catch((error) => {
-          console.error('Error fetching candidate data:', error);
-        });
+      const data =fetchCandidateData(RID)
+        // .then((data) => {
+        //   setCandidateData(data.candidate);
+        // })
+        // .catch((error) => {
+        //   console.error('Error fetching candidate data:', error);
+        // });
+        console.log(data+"hello");
     }
+    
   }, [RID]);
-  useEffect(() => {
-    if (candidateData) {
-      setFormData((prevData) => ({
-        ...prevData,
-        Fname: candidateData.Fname || "",
-        Email: candidateData.Email || "",
-        Dob: candidateData.Dob || "",
-      }));
-    }
-  }, [candidateData]);
-
 
   const fetchCandidateData = async (RID) => {
     try {
-      const response = await axios.get(`http://localhost:4444/form/${RID}`); 
+      const response = await axios.get(`http://localhost:4444/${RID}`);
       const data = response.data;
-      return data;
+      return data.candidate;
     } catch (error) {
       throw error;
     }
   };
+  
 
   const handleChange=(e)=>{
     const{name,value}=e.target;
@@ -129,6 +117,40 @@ const Form = ({RID}) => {
         
     })
   }
+  const [rows, setRows] = useState([
+    {
+      sno: 1,
+      examination: "",
+      subject: "",
+      board: "",
+      year: "",
+      status: "",
+      percentage: "",
+    },
+  ]);
+
+  const handleAddRow = () => {
+    const newRow = {
+      sno: rows.length + 1,
+      examination: "",
+      subject: "",
+      board: "",
+      year: "",
+      status: "",
+      percentage: "",
+    };
+    setRows([...rows, newRow]);
+  };
+
+  const handleInputChange = (index, field, value) => {
+    const updatedRows = rows.map((row, i) => {
+      if (i === index) {
+        return { ...row, [field]: value };
+      }
+      return row;
+    });
+    setRows(updatedRows);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -137,8 +159,10 @@ const Form = ({RID}) => {
       for (let key in formData) {
         formDataToSend.append(key, formData[key]);
       }
-
+      // formDataToSend.append("resume", formData.resume);
       await axios.post("http://localhost:4444/form/post", formDataToSend);
+
+
       console.log("Registration successful!");
     } catch (error) {
       console.log("Error", error);
@@ -178,10 +202,10 @@ const Form = ({RID}) => {
           ) : (
             <input className="def_input"
               type="text"
-              name="Fname"
+              name="firstname"
               onChange={handleChange}
-            value={candidateData ? candidateData.Fname : ""}
-              readOnly
+              value={candidateData ? candidateData.Fname : ""}
+              // readOnly
             />
           )}
         </div>
@@ -197,7 +221,7 @@ const Form = ({RID}) => {
               name="dob"
               onChange={dobHandleChange}
               value={candidateData ? candidateData.Dob : ""}
-              readOnly
+              // readOnly
             />
           )}
         </div>
@@ -211,7 +235,7 @@ const Form = ({RID}) => {
               name="email"
               onChange={emailHandleChange}
               value={candidateData ? candidateData.Email : ""}
-             readOnly
+            //  readOnly
             />
           )}
         </div>
@@ -223,9 +247,9 @@ const Form = ({RID}) => {
           ) : (
             <input class="def_input"
               type="text"
-              name="fatherName"
+              name="fathersname"
               onChange={handleChange}
-              value={formData.fatherName}
+              value={formData.fathersname}
               required
             />
           )}
@@ -334,7 +358,95 @@ const Form = ({RID}) => {
         )}
       </div>
       </div>
-        <div className="field"v>
+  
+        <br></br>
+        <h3>Educational Qualification</h3>
+         
+
+      <table>
+        <thead>
+
+          <tr>
+            <th>S.No.</th>
+            <th>Examination Passed</th>
+            <th>Subject</th>
+            <th>Name of Board/University</th>
+            <th>Year of Joining</th>
+            <th>Pursuing/Completed</th>
+            <th>Percentage</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, index) => (
+            <tr key={index}>
+              <td>{row.sno}</td>
+              <td>
+                <input
+                  type="text"
+                  value={row.examination}
+                  onChange={(e) =>
+                    handleInputChange(index, "examination", e.target.value)
+                  }
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  value={row.subject}
+                  onChange={(e) =>
+                    handleInputChange(index, "subject", e.target.value)
+                  }
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  value={row.board}
+                  onChange={(e) =>
+                    handleInputChange(index, "board", e.target.value)
+                  }
+                />
+              </td>
+              <td>
+                <select
+                  value={row.year}
+                  onChange={(e) =>
+                    handleInputChange(index, "year", e.target.value)
+                  }
+                >
+                  <option value="">Select Year</option>
+                  <option value="2022">2022</option>
+                  <option value="2023">2023</option>
+                  {/* Add more years */}
+                </select>
+              </td>
+              <td>
+                <select
+                  value={row.status}
+                  onChange={(e) =>
+                    handleInputChange(index, "status", e.target.value)
+                  }
+                >
+                  <option value="">Select Status</option>
+                  <option value="Pursuing">Pursuing</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </td>
+              <td>
+                <input
+                  type="text"
+                  value={row.percentage}
+                  onChange={(e) =>
+                    handleInputChange(index, "percentage", e.target.value)
+                  }
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <button onClick={handleAddRow}>Add Row</button><br></br>
+      <div className="field"v>
         <label>Upload Resume:</label>
         <input
           type="file"
@@ -344,7 +456,8 @@ const Form = ({RID}) => {
           // required
         />
         {fileError && <p style={{ color: "red" }}>{fileError}</p>}
-      </div>
+        </div>
+      
         {previewMode ? (
           <button className="field form-button" type="button" onClick={handlePreview}>
             Edit
@@ -361,6 +474,7 @@ const Form = ({RID}) => {
         )}
       </form>
     </div>
+
   );
   
 };

@@ -13,14 +13,12 @@ const storage = multer.diskStorage({
   });
   
   const upload = multer({ storage });
-router.post('/post',upload.single('resume'), async (req,res)=>{
+router.post('/form/post',upload.single('resume'), async (req,res)=>{
     try {
         const {
           RID,
           title,
-          fname,
           fathersname,
-          dob,
           address1,
           address2,
           city,
@@ -28,16 +26,13 @@ router.post('/post',upload.single('resume'), async (req,res)=>{
           pincode,
           phone,
           mobile,
-          email
         } = req.body;
     
         // Create a new form entry in your database
         const newFormEntry = new formDetails({
           RID,
           title,
-          fname,
           fathersname,
-          dob,
           address1,
           address2,
           city,
@@ -45,8 +40,7 @@ router.post('/post',upload.single('resume'), async (req,res)=>{
           pincode,
           phone,
           mobile,
-          email,
-          resume: req.file.filename // Use the uploaded file's filename
+          resume: req.file.filename 
         });
     
         await newFormEntry.save();
