@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import axios from "axios";
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import "./FormStyle.css";
 
-const Form = () => {
+const Form = ({RID}) => {
+  const [candidateData, setCandidateData] = useState(null);
   const[previewMode,setPreviewMode]=useState(false);
   const [fileError, setFileError] = useState("");
   const[formData,setFormData]=useState({
+    RID:RID,
     title:"",
     fname:"",
     fathersname:"",
@@ -22,6 +24,39 @@ const Form = () => {
     email:"",
     resume:null
   })
+  useEffect(() => {
+    if (RID) {
+      fetchCandidateData(RID)
+        .then((data) => {
+          setCandidateData(data.candidate);
+          console.log(candidateData);
+        })
+        .catch((error) => {
+          console.error('Error fetching candidate data:', error);
+        });
+    }
+  }, [RID]);
+  useEffect(() => {
+    if (candidateData) {
+      setFormData((prevData) => ({
+        ...prevData,
+        Fname: candidateData.Fname || "",
+        Email: candidateData.Email || "",
+        Dob: candidateData.Dob || "",
+      }));
+    }
+  }, [candidateData]);
+
+
+  const fetchCandidateData = async (RID) => {
+    try {
+      const response = await axios.get(`http://localhost:4444/form/${RID}`); 
+      const data = response.data;
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  };
 
   const handleChange=(e)=>{
     const{name,value}=e.target;
@@ -103,7 +138,7 @@ const Form = () => {
         formDataToSend.append(key, formData[key]);
       }
 
-      await axios.post("http://localhost:4444/forms", formDataToSend);
+      await axios.post("http://localhost:4444/form/post", formDataToSend);
       console.log("Registration successful!");
     } catch (error) {
       console.log("Error", error);
@@ -120,7 +155,7 @@ const Form = () => {
       <div className="heading">
         <h1 className="headingtext">Application form for Internship in Niti Aayog</h1>
       </div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} encType="multipart/foorm-data">
       <div className="field-container">
         <div className="field">
           <label>Title:</label>
@@ -137,15 +172,16 @@ const Form = () => {
         </div>
         <div className="field">
           <label>First Name:</label>
+          {/* {candidateData.Fname} */}
           {previewMode ? (
             <span>{formData.firstName}</span>
           ) : (
-            <input class="def_input"
+            <input className="def_input"
               type="text"
-              name="firstName"
+              name="Fname"
               onChange={handleChange}
-              value={formData.firstName}
-              required
+            value={candidateData ? candidateData.Fname : ""}
+              readOnly
             />
           )}
         </div>
@@ -160,8 +196,8 @@ const Form = () => {
               type="date"
               name="dob"
               onChange={dobHandleChange}
-              value={formData.dob}
-              required
+              value={candidateData ? candidateData.Dob : ""}
+              readOnly
             />
           )}
         </div>
@@ -174,8 +210,8 @@ const Form = () => {
               type="email"
               name="email"
               onChange={emailHandleChange}
-              value={formData.email}
-              required
+              value={candidateData ? candidateData.Email : ""}
+             readOnly
             />
           )}
         </div>
@@ -305,7 +341,7 @@ const Form = () => {
           name="resume"
           onChange={handleFileChange}
           accept=".pdf"
-          required
+          // required
         />
         {fileError && <p style={{ color: "red" }}>{fileError}</p>}
       </div>

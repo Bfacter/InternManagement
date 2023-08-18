@@ -6,7 +6,7 @@ const candidateRegistrations = require('../models/candidate_registartions');
 router.post('/', async (req, res) => {
   try {
     const { Email, password } = req.body;
-
+  
 
     const candidate = await candidateRegistrations.findOne({ Email });
 
@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
     if (!passwordMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
-    res.status(200).json({ message: 'Login successful' });
+    res.status(200).json({ message: 'Login successful',RID:candidate.RID });
   } catch (error) {
     res.status(500).json({ message: 'Error logging in', error: error.message });
   }

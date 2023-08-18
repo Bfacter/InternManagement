@@ -8,13 +8,15 @@ import Form from './components/MainForm/Form';
 const App = () => {
   
   const [currentPage, setCurrentPage] = useState('LoginForm');
+  const [userRID, setUserRID] = useState(null);
   const goToLogin = () => {
     setCurrentPage('LoginForm');
   };
   const goToRegistration = () => {
     setCurrentPage('RegistrationForm');
   };
-  const goToForm = () => {
+  const goToForm = (RID) => {
+    setUserRID(RID)
     setCurrentPage('Form');
   };
   return (
@@ -22,7 +24,7 @@ const App = () => {
       <PageNav/>
       {currentPage === 'LoginForm' && <LoginForm goToRegistration={goToRegistration} goToForm={goToForm} />}
       {currentPage === 'RegistrationForm' && <RegistrationForm goToLogin={goToLogin} />}
-      {currentPage === 'Form' && <Form />}
+      {currentPage === 'Form' && <Form userRID={userRID}/>}
       <PageFoot/>
     </div>
   );

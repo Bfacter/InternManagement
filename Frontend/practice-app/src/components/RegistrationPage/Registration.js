@@ -101,10 +101,10 @@ const RegistrationForm = ({goToLogin}) => {
       window.alert("Name must be in correct format.");
       return;
     }
-    if (!recaptchaResponse) {
-      window.alert("Please complete the CAPTCHA.");
-      return;
-    }
+    // if (!recaptchaResponse) {
+    //   window.alert("Please complete the CAPTCHA.");
+    //   return;
+    // }
     try {
       await axios.post("http://localhost:4444/register", formData);
       console.log("Registration successful!");

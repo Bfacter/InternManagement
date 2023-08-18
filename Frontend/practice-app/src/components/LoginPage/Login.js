@@ -22,12 +22,15 @@ const LoginForm = ({ className,goToForm,goToRegistration}) => {
         "http://localhost:4444/login",
         formData
       );
-      // console.log("Login successful!", response.data);
-      window.alert("Login Succesful!")
+      console.log("Login successful!", response.data);
+      
+      window.alert("Login Succesful!");
+      goToForm(response.data.RID);
+      
       goToForm();
     } catch (error) {
       window.alert("Invalid Credentials")
-      // console.error("Error logging in:", error.response.data.message);
+      console.error("Error logging in:", error.response.data.message);
     }
   };
 
