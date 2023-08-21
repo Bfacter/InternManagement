@@ -40,8 +40,9 @@ const CustomCaptcha = ({ onCaptchaVerified }) => {
 
   return (
     <div className="captcha">
-      <label htmlFor="captchaChallenge">CAPTCHA: {captchaChallenge}</label>
+      <label htmlFor="captchaChallenge" className="CLable">CAPTCHA: {captchaChallenge}</label>
       <input
+      className="CInput"
         type="text"
         id="captchaChallenge"
         name="captchaChallenge"
@@ -49,7 +50,7 @@ const CustomCaptcha = ({ onCaptchaVerified }) => {
         onChange={handleChange}
         required
       />
-      <button type="button" onClick={handleReloadCaptcha}>
+      <button type="button" onClick={handleReloadCaptcha} className="CButton">
         Reload CAPTCHA
       </button>
     </div>

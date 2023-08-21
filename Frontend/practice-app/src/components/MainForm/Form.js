@@ -115,6 +115,7 @@ const Form = ({RID}) => {
         
     })
   }
+
   const [rows, setRows] = useState([
     {
       sno: 1,
@@ -149,6 +150,7 @@ const Form = ({RID}) => {
     });
     setRows(updatedRows);
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();

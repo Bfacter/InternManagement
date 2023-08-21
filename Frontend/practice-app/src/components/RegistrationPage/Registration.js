@@ -221,8 +221,9 @@ const RegistrationForm = ({goToLogin}) => {
           <CustomCaptcha onCaptchaVerified={handleCaptchaVerified} />
 
           <div className="buttonflex">
-            <div className="ptext"><p>Already registered? <button onClick={goToLogin}>Login here</button></p></div>
+           
             <button class="register-button" type="submit"  >Register</button>
+            <div className="ptext"><p>Already registered? <button onClick={goToLogin}>Login here</button></p></div>
           </div>
         </form>
       </div>

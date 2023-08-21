@@ -5,12 +5,12 @@
     margin-top: 20px;
   }
   
-  label {
+  .CLabel {
     font-size: 18px;
     margin-bottom: 10px;
   }
   
-  input {
+  .CInput {
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
@@ -19,7 +19,7 @@
     margin-bottom: 10px;
   }
   
-  button {
+  .CButton {
     padding: 10px 20px;
     background-color: #007bff;
     color: white;
@@ -30,6 +30,6 @@
     transition: background-color 0.2s;
   }
   
-  button:hover {
+  .CButton:hover {
     background-color: #0056b3;
   }

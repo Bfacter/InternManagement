@@ -7,14 +7,19 @@ const registrationRoutes = require('./routes/registrationroute');
 const loginRoute=require('./routes/loginroute')
 const formgetRoute=require('./routes/formgetroute')
 const formpostRoute=require('./routes/formpostroute')
+const optionsFromBackend = require('./routes/options');
 const app = express();
 const port = 4444; 
        
 // Middleware
 app.use(cors()); 
 app.use(bodyParser.json());
- 
-     
+app.use(express.static('public'));
+
+
+app.get('/api/options', (req, res) => {
+    res.json(optionsFromBackend);
+}); 
 app.use('/register', registrationRoutes);
 app.use('/login', loginRoute);
 app.use('/form', formgetRoute);

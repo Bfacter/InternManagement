@@ -62,11 +62,12 @@
   }
   
   .rectangle {
-    height: 549px;
+    height: 100%;
+
     left: 417px;
-    object-fit: cover;
+    /* object-fit: cover; */
     position: absolute;
-    width: 70%;
+    width: 50%;
   }
   .div {
     background: linear-gradient(180deg, rgb(68, 177, 239) 0%, rgb(130, 203, 244) 100%);
