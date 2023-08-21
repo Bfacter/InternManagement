@@ -341,6 +341,7 @@ const Form = ({RID}) => {
           <PhoneInput class="def_input"
             name="phone"
             country={"in"}
+            onlyCountries={["in"]}
             onChange={handlePhoneChange}
             value={formData.phone}
             required
@@ -355,6 +356,7 @@ const Form = ({RID}) => {
           <PhoneInput class="def_input"
             name="mobile"
             country={"in"}
+            onlyCountries={["in"]}
             onChange={handleMobileChange}
             value={formData.mobile}
             required

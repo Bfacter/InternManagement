@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./RegistrationStyle.css";
-// import ReCAPTCHA from "react-google-recaptcha";
+import CustomCaptcha from "../Custom/CustomCaptcha";
 
 import {
   isFNameValid,
@@ -10,9 +10,11 @@ import {
   isPasswordValid,
 } from "../utils/typeCheckUtil";
 const RegistrationForm = ({goToLogin}) => {
-  const [recaptchaResponse, setRecaptchaResponse] = useState("");
-  const handleRecaptchaChange = (response) => {
-    setRecaptchaResponse(response);
+  
+  const [captchaVerified, setCaptchaVerified] = useState(false);
+
+  const handleCaptchaVerified = (verified) => {
+    setCaptchaVerified(verified);
   };
 
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
@@ -101,10 +103,11 @@ const RegistrationForm = ({goToLogin}) => {
       window.alert("Name must be in correct format.");
       return;
     }
-    // if (!recaptchaResponse) {
-    //   window.alert("Please complete the CAPTCHA.");
-    //   return;
-    // }
+    if (!captchaVerified) {
+      window.alert("Invalid CAPTCHA. Please try again.");
+      return;
+    }
+  
     try {
       await axios.post("http://localhost:4444/register", formData);
       console.log("Registration successful!");
@@ -215,7 +218,7 @@ const RegistrationForm = ({goToLogin}) => {
               required
             />
           </div>
-          <div className="g-recaptcha" data-sitekey="6LesIJonAAAAAHhvEU8s-VsQFL-uNEXAAZt6YEBK" onChange={handleRecaptchaChange}></div>
+          <CustomCaptcha onCaptchaVerified={handleCaptchaVerified} />
 
           <div className="buttonflex">
             <div className="ptext"><p>Already registered? <button onClick={goToLogin}>Login here</button></p></div>
