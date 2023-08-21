@@ -24,7 +24,7 @@ const App = () => {
       <PageNav/>
       {currentPage === 'LoginForm' && <LoginForm goToRegistration={goToRegistration} goToForm={goToForm} />}
       {currentPage === 'RegistrationForm' && <RegistrationForm goToLogin={goToLogin} />}
-      {currentPage === 'Form' && <Form RID={RID}/>}
+      {currentPage === 'Form' && <Form RID={RID}/> }
       <PageFoot/>
     </div>
   );

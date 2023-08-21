@@ -9,7 +9,7 @@ const Form = ({RID}) => {
   const[previewMode,setPreviewMode]=useState(false);
   const [fileError, setFileError] = useState("");
   const[formData,setFormData]=useState({
-    RID:10,
+    RID:RID,
     title:"",
     fathersname:"",
     address1:"",
@@ -22,33 +22,31 @@ const Form = ({RID}) => {
     resume:""
   })
   useEffect(() => {
-    if (RID) {
-      const data =fetchCandidateData(RID)
-        // .then((data) => {
-        //   setCandidateData(data.candidate);
-        // })
-        // .catch((error) => {
-        //   console.error('Error fetching candidate data:', error);
-        // });
-        console.log(data+"hello");
-    }
-    
-  }, [RID]);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:4444/form/${RID}`);
+        const data = response.data.candidate;
+        setCandidateData(data);
+      } catch (error) {
+ 
+        console.error(`Error fetching candidate data:`, error);
+      }
+    };
 
-  const fetchCandidateData = async (RID) => {
-    try {
-      const response = await axios.get(`http://localhost:4444/${RID}`);
-      const data = response.data;
-      return data.candidate;
-    } catch (error) {
-      throw error;
-    }
+    fetchData();
+  }, [RID]);
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // Months are zero-based
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
   };
   
 
   const handleChange=(e)=>{
     const{name,value}=e.target;
-    const newValue = value.replace(/[^a-zA-Z]/g, '');
+    const newValue = value.replace(/[^a-zA-Z ]/g, '');
     setFormData({
         ...formData,
         [name]:newValue,
@@ -56,7 +54,7 @@ const Form = ({RID}) => {
   }
   const newHandleChange = (event) => {
     const { name, value } = event.target;
-    const newValue = value.replace(/[^a-zA-Z0-9-/,]/g, '');
+    const newValue = value.replace(/[^a-zA-Z0-9-/, ]/g, '');
     setFormData({
       ...formData,
       [name]: newValue,
@@ -186,7 +184,8 @@ const Form = ({RID}) => {
           {previewMode ? (
             <span>{formData.title}</span>
           ) : (
-          <select class="def_input title-option" name="title" onChange={handleChange} value={formData.title} >
+          <select className="def_input title-option" name="title" onChange={handleChange} value={formData.title} >
+            <option>Select</option>
             <option value="Mr">Mr.</option>
             <option value="Mrs">Mrs.</option>
             <option value="Ms">Ms.</option>
@@ -196,16 +195,17 @@ const Form = ({RID}) => {
         </div>
         <div className="field">
           <label>First Name:</label>
-          {/* {candidateData.Fname} */}
           {previewMode ? (
-            <span>{formData.firstName}</span>
+            <span>{candidateData.Fname}</span>
           ) : (
             <input className="def_input"
               type="text"
               name="firstname"
               onChange={handleChange}
               value={candidateData ? candidateData.Fname : ""}
-              // readOnly
+              readOnly
+             disabled
+
             />
           )}
         </div>
@@ -214,28 +214,31 @@ const Form = ({RID}) => {
        <div className="field">
           <label>Date of Birth:</label>
           {previewMode ? (
-            <span>{formData.dob}</span>
+            <span>{candidateData.Dob.substr(0, 10)}</span>
           ) : (
-            <input class="def_input"
+            <input className="def_input"
               type="date"
               name="dob"
               onChange={dobHandleChange}
-              value={candidateData ? candidateData.Dob : ""}
-              // readOnly
+              value={candidateData?.Dob ? candidateData.Dob.substr(0, 10) : ""}
+              readOnly
+             disabled
+
             />
           )}
         </div>
        <div className="field">
           <label>Email:</label>
           {previewMode ? (
-            <span>{formData.email}</span>
+            <span>{candidateData.Email}</span>
           ) : (
-            <input class="def_input"
+            <input className="def_input"
               type="email"
               name="email"
               onChange={emailHandleChange}
               value={candidateData ? candidateData.Email : ""}
-            //  readOnly
+             readOnly
+             disabled
             />
           )}
         </div>
@@ -245,7 +248,7 @@ const Form = ({RID}) => {
           {previewMode ? (
             <span>{formData.fathersname}</span>
           ) : (
-            <input class="def_input"
+            <input className="def_input"
               type="text"
               name="fathersname"
               onChange={handleChange}
@@ -260,7 +263,7 @@ const Form = ({RID}) => {
           {previewMode ? (
             <span>{formData.address1}</span>
           ) : (
-            <input class="def_input"
+            <input className="def_input"
               type="text"
               name="address1"
               onChange={newHandleChange}
@@ -274,7 +277,7 @@ const Form = ({RID}) => {
           {previewMode ? (
             <span>{formData.address2}</span>
           ) : (
-            <input class="def_input"
+            <input className="def_input"
               type="text"
               name="address2"
               onChange={newHandleChange}
@@ -289,7 +292,7 @@ const Form = ({RID}) => {
           {previewMode ? (
             <span>{formData.city}</span>
           ) : (
-            <input class="def_input"
+            <input className="def_input"
               type="text"
               name="city"
               onChange={handleChange}
@@ -303,7 +306,7 @@ const Form = ({RID}) => {
           {previewMode ? (
             <span>{formData.country}</span>
           ) : (
-            <input class="def_input"
+            <input className="def_input"
               type="text"
               name="country"
               onChange={handleChange}
@@ -317,7 +320,7 @@ const Form = ({RID}) => {
           {previewMode ? (
             <span>{formData.pincode}</span>
           ) : (
-            <input class="def_input"
+            <input className="def_input"
               type="text"
               name="pincode"
               onChange={pincodeHandleChange}
@@ -328,7 +331,7 @@ const Form = ({RID}) => {
         </div>
       </div>
       <div className="field-container"> 
-      {/* flex ka main div hai field-container uske andar field classname mein jo bhi dega vo ek line m aajayega */}
+      {/* flex ka main div hai field-container uske andar field className mein jo bhi dega vo ek line m aajayega */}
         <div className="field">
         <label>Phone No:</label>
         {previewMode ? (

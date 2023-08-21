@@ -11,7 +11,7 @@ router.get('/:RID', async (req,res)=>{
         return res.status(404).json({message : 'Candidate not found'});
     }
     res.status(200).json({ candidate });
-    }catch{
+    }catch(error){
         res.status(500).json({ message: 'Error retrieving data', error: error.message });
     }
 });
