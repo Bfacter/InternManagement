@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
   });
   
   const upload = multer({ storage });
-router.post('/form/post',upload.single('resume'), async (req,res)=>{
+router.post('/post',upload.single('resume'), async (req,res)=>{
     try {
         const {
           RID,
