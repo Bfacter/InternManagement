@@ -17,9 +17,7 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 
-app.get('/api/options', (req, res) => {
-    res.json(optionsFromBackend);
-}); 
+app.use('/api/options', optionsFromBackend); 
 app.use('/register', registrationRoutes);
 app.use('/login', loginRoute);
 app.use('/form', formgetRoute);

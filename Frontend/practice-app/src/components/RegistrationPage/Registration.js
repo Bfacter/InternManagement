@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./RegistrationStyle.css";
-import CustomCaptcha from "../Custom/CustomCaptcha";
+
 
 import {
   isFNameValid,
@@ -11,12 +11,6 @@ import {
 } from "../utils/typeCheckUtil";
 const RegistrationForm = ({goToLogin}) => {
   
-  const [captchaVerified, setCaptchaVerified] = useState(false);
-
-  const handleCaptchaVerified = (verified) => {
-    setCaptchaVerified(verified);
-  };
-
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [formData, setFormData] = useState({
     Fname: "",
@@ -103,10 +97,7 @@ const RegistrationForm = ({goToLogin}) => {
       window.alert("Name must be in correct format.");
       return;
     }
-    if (!captchaVerified) {
-      window.alert("Invalid CAPTCHA. Please try again.");
-      return;
-    }
+   
   
     try {
       await axios.post("http://localhost:4444/register", formData);
@@ -218,7 +209,7 @@ const RegistrationForm = ({goToLogin}) => {
               required
             />
           </div>
-          <CustomCaptcha onCaptchaVerified={handleCaptchaVerified} />
+         
 
           <div className="buttonflex">
            

@@ -8,6 +8,7 @@ const Form = ({RID}) => {
   const [candidateData, setCandidateData] = useState({});
   const[previewMode,setPreviewMode]=useState(false);
   const [fileError, setFileError] = useState("");
+  const [examinationOptions, setExaminationOptions] = useState([]);
   const[formData,setFormData]=useState({
     RID:RID,
     title:"",
@@ -35,13 +36,7 @@ const Form = ({RID}) => {
 
     fetchData();
   }, [RID]);
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const day = date.getDate();
-    const month = date.getMonth() + 1; // Months are zero-based
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
+
   
 
   const handleChange=(e)=>{
@@ -115,14 +110,27 @@ const Form = ({RID}) => {
         
     })
   }
+  useEffect(() => {
+    fetchExaminationOptions();
+  }, []);
 
+  const fetchExaminationOptions = async () => {
+    try {
+      const response = await fetch('http://localhost:4444/api/options'); // Update with your backend URL
+      const data = await response.json();
+      setExaminationOptions(data.options);
+    } catch (error) {
+      console.error('Error fetching examination options:', error);
+    }
+  };
   const [rows, setRows] = useState([
     {
       sno: 1,
       examination: "",
       subject: "",
       board: "",
-      year: "",
+      syear: "",
+      cyear:"",
       status: "",
       percentage: "",
     },
@@ -134,7 +142,8 @@ const Form = ({RID}) => {
       examination: "",
       subject: "",
       board: "",
-      year: "",
+      syear: "",
+      cyear:"",
       status: "",
       percentage: "",
     };
@@ -370,7 +379,26 @@ const Form = ({RID}) => {
         <br></br>
         <h3>Educational Qualification</h3>
          
-
+        {previewMode ? (
+        // Render preview mode with entered data in the table
+        <table>
+          {/* ... Table structure */}
+          <tbody>
+            {rows.map((row, index) => (
+              <tr key={index}>
+                <td>SNO {row.sno}</td>
+                <td>{row.examination}</td>
+                <td>{row.subject}</td>
+                <td>{row.board}</td>
+                <td>{row.cyear}</td>
+                <td>{row.syear}</td>
+                <td>{row.status}</td>
+                <td>{row.percentage}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
       <table>
         <thead>
 
@@ -380,6 +408,7 @@ const Form = ({RID}) => {
             <th>Subject</th>
             <th>Name of Board/University</th>
             <th>Year of Joining</th>
+            <th>Year of Completion</th>
             <th>Pursuing/Completed</th>
             <th>Percentage</th>
           </tr>
@@ -389,16 +418,23 @@ const Form = ({RID}) => {
             <tr key={index}>
               <td>{row.sno}</td>
               <td>
-                <input
-                  type="text"
-                  value={row.examination}
-                  onChange={(e) =>
-                    handleInputChange(index, "examination", e.target.value)
-                  }
-                />
-              </td>
+              {/* Dropdown for Examination Passed */}
+              <select class="def_input"
+                value={row.examination}
+                onChange={(e) =>
+                  handleInputChange(index, 'examination', e.target.value)
+                }
+              >
+                <option value="">Select Examination</option>
+                {examinationOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </td>
               <td>
-                <input
+                <input class="def_input"
                   type="text"
                   value={row.subject}
                   onChange={(e) =>
@@ -407,7 +443,7 @@ const Form = ({RID}) => {
                 />
               </td>
               <td>
-                <input
+                <input class="def_input"
                   type="text"
                   value={row.board}
                   onChange={(e) =>
@@ -416,10 +452,10 @@ const Form = ({RID}) => {
                 />
               </td>
               <td>
-                <select
-                  value={row.year}
+                <select class="def_input select-option"
+                  value={row.syear}
                   onChange={(e) =>
-                    handleInputChange(index, "year", e.target.value)
+                    handleInputChange(index, "startingyear", e.target.value)
                   }
                 >
                   <option value="">Select Year</option>
@@ -429,7 +465,20 @@ const Form = ({RID}) => {
                 </select>
               </td>
               <td>
-                <select
+                <select class="def_input select-option"
+                  value={row.cyear}
+                  onChange={(e) =>
+                    handleInputChange(index, "completionyear", e.target.value)
+                  }
+                >
+                  <option value="">Select Year</option>
+                  <option value="2022">2022</option>
+                  <option value="2023">2023</option>
+                  {/* Add more years */}
+                </select>
+              </td>
+              <td>
+                <select class="def_input select-option"
                   value={row.status}
                   onChange={(e) =>
                     handleInputChange(index, "status", e.target.value)
@@ -441,7 +490,7 @@ const Form = ({RID}) => {
                 </select>
               </td>
               <td>
-                <input
+                <input class="def_input "
                   type="text"
                   value={row.percentage}
                   onChange={(e) =>
@@ -453,8 +502,9 @@ const Form = ({RID}) => {
           ))}
         </tbody>
       </table>
+       )}
       <button onClick={handleAddRow}>Add Row</button><br></br>
-      <div className="field"v>
+      <div className="field def_input"v>
         <label>Upload Resume:</label>
         <input
           type="file"

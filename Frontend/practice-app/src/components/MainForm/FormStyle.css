@@ -65,6 +65,9 @@
   .title-option{
     width:18.5%;
   }
+  .select-option{
+    width:200px;
+  }
   .form-button{
     width:18%;
     display: inline-block;
