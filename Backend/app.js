@@ -8,6 +8,8 @@ const loginRoute=require('./routes/loginroute')
 const formgetRoute=require('./routes/formgetroute')
 const formpostRoute=require('./routes/formpostroute')
 const optionsFromBackend = require('./routes/options');
+const areaBackend=require('./routes/areaoptions')
+
 const app = express();
 const port = 4444; 
        
@@ -18,6 +20,8 @@ app.use(express.static('public'));
 
 
 app.use('/api/options', optionsFromBackend); 
+app.use('/api/areaoptions', areaBackend); 
+
 app.use('/register', registrationRoutes);
 app.use('/login', loginRoute);
 app.use('/form', formgetRoute);

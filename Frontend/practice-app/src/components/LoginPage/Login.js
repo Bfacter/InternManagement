@@ -36,7 +36,7 @@ const LoginForm = ({ className,goToForm,goToRegistration}) => {
 
   return (
     <div className="Mainloginpage">
-      <div className="box">
+      {/* <div className="box">
         <div className="nav-bar">
           <div className="div1">
             <a href="">Apply Online</a>
@@ -45,7 +45,7 @@ const LoginForm = ({ className,goToForm,goToRegistration}) => {
             <a href="">Print Application</a>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className={`side-bar ${className}`}>
         <div className="overlap">
           <img

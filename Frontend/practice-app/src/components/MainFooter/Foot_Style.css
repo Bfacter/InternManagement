@@ -31,6 +31,7 @@
     top: 47px;
     width: 770px;
     border-right: #ffffff solid 2px;
+    margin-top: 2%;
     /* margin-left :5%; */
   } 
 .for-any-feedback {
@@ -44,6 +45,7 @@
     line-height: normal;
     text-align: center;
     top: 51px;
+    margin-top: 2%;
     width: 372px;
   }
   
@@ -57,6 +59,7 @@
     letter-spacing: 0;
     line-height: normal;
     text-align: center;
+    margin-top: 2%;
     top: 51px;
   }
   .alltext{

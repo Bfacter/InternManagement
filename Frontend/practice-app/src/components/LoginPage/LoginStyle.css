@@ -67,7 +67,7 @@
     left: 417px;
     /* object-fit: cover; */
     position: absolute;
-    width: 50%;
+    width: 65%;
   }
   .div {
     background: linear-gradient(180deg, rgb(68, 177, 239) 0%, rgb(130, 203, 244) 100%);

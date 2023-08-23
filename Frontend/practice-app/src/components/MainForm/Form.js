@@ -3,12 +3,15 @@ import axios from "axios";
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import "./FormStyle.css";
+import { getCurrentMonthPlusTwoOptions } from '../utils/dateUtils'
 
 const Form = ({RID}) => {
   const [candidateData, setCandidateData] = useState({});
   const[previewMode,setPreviewMode]=useState(false);
   const [fileError, setFileError] = useState("");
   const [examinationOptions, setExaminationOptions] = useState([]);
+  const [AreaOptions, setAreaOptions] = useState([]);
+
   const[formData,setFormData]=useState({
     RID:RID,
     title:"",
@@ -20,7 +23,9 @@ const Form = ({RID}) => {
     pincode:"",
     phone:"",
     mobile:"",
-    resume:""
+    resume:"",
+    desiredMonth:"",
+    AreaOptions:""
   })
   useEffect(() => {
     const fetchData = async () => {
@@ -37,9 +42,23 @@ const Form = ({RID}) => {
     fetchData();
   }, [RID]);
 
+  const handleChange=(e)=>{
+    const{name,value}=e.target;
+    setFormData({
+      ...formData,
+      [name]:value
+    })
+  }
+  const handleIChange = (field, value) => {
+    setFormData({
+      ...formData,
+      [field]: value,
+    });
+  };
+  
   
 
-  const handleChange=(e)=>{
+  const namehandleChange=(e)=>{
     const{name,value}=e.target;
     const newValue = value.replace(/[^a-zA-Z ]/g, '');
     setFormData({
@@ -123,6 +142,19 @@ const Form = ({RID}) => {
       console.error('Error fetching examination options:', error);
     }
   };
+  useEffect(() => {
+    fetchAreaOptions();
+  }, []);
+
+  const fetchAreaOptions = async () => {
+    try {
+      const response = await fetch('http://localhost:4444/api/areaoptions'); // Update with your backend URL
+      const data = await response.json();
+      setAreaOptions(data.options);
+    } catch (error) {
+      console.error('Error fetching examination options:', error);
+    }
+  };
   const [rows, setRows] = useState([
     {
       sno: 1,
@@ -182,7 +214,7 @@ const Form = ({RID}) => {
   const handlePreview = () => {
     setPreviewMode(!previewMode);
   };
-
+  
   return (
     <div className="main-outer-div">
       <div className="heading">
@@ -195,7 +227,7 @@ const Form = ({RID}) => {
           {previewMode ? (
             <span>{formData.title}</span>
           ) : (
-          <select className="def_input title-option" name="title" onChange={handleChange} value={formData.title} >
+          <select className="def_input title-option" name="title" onChange={namehandleChange} value={formData.title} >
             <option>Select</option>
             <option value="Mr">Mr.</option>
             <option value="Mrs">Mrs.</option>
@@ -206,14 +238,14 @@ const Form = ({RID}) => {
           
         </div>
         <div className="field">
-          <label>First Name:</label>
+          <label>Full Name:</label>
           {previewMode ? (
             <span>{candidateData.Fname}</span>
           ) : (
             <input className="def_input"
               type="text"
               name="firstname"
-              onChange={handleChange}
+              onChange={namehandleChange}
               value={candidateData ? candidateData.Fname : ""}
               readOnly
              disabled
@@ -380,13 +412,22 @@ const Form = ({RID}) => {
         <h3>Educational Qualification</h3>
          
         {previewMode ? (
-        // Render preview mode with entered data in the table
         <table>
-          {/* ... Table structure */}
+
           <tbody>
             {rows.map((row, index) => (
-              <tr key={index}>
-                <td>SNO {row.sno}</td>
+              <><tr>
+                <th>S.No.</th>
+            <th>Examination Passed</th>
+            <th>Subject</th>
+            <th>Name of Board/University</th>
+            <th>Year of Joining</th>
+            <th>Year of Completion</th>
+            <th>Pursuing/Completed</th>
+            <th>Percentage</th>
+
+                </tr><tr key={index}>
+                <td>{row.sno}</td>
                 <td>{row.examination}</td>
                 <td>{row.subject}</td>
                 <td>{row.board}</td>
@@ -394,7 +435,7 @@ const Form = ({RID}) => {
                 <td>{row.syear}</td>
                 <td>{row.status}</td>
                 <td>{row.percentage}</td>
-              </tr>
+              </tr></>
             ))}
           </tbody>
         </table>
@@ -405,7 +446,7 @@ const Form = ({RID}) => {
           <tr>
             <th>S.No.</th>
             <th>Examination Passed</th>
-            <th>Subject</th>
+            <th>Discipline/Subject</th>
             <th>Name of Board/University</th>
             <th>Year of Joining</th>
             <th>Year of Completion</th>
@@ -419,7 +460,7 @@ const Form = ({RID}) => {
               <td>{row.sno}</td>
               <td>
               {/* Dropdown for Examination Passed */}
-              <select class="def_input"
+              <select class="def_input sizing"
                 value={row.examination}
                 onChange={(e) =>
                   handleInputChange(index, 'examination', e.target.value)
@@ -434,7 +475,7 @@ const Form = ({RID}) => {
               </select>
             </td>
               <td>
-                <input class="def_input"
+                <input class="def_input sizing"
                   type="text"
                   value={row.subject}
                   onChange={(e) =>
@@ -443,7 +484,7 @@ const Form = ({RID}) => {
                 />
               </td>
               <td>
-                <input class="def_input"
+                <input class="def_input sizing"
                   type="text"
                   value={row.board}
                   onChange={(e) =>
@@ -452,10 +493,10 @@ const Form = ({RID}) => {
                 />
               </td>
               <td>
-                <select class="def_input select-option"
+                <select class="def_input select-option sizing"
                   value={row.syear}
                   onChange={(e) =>
-                    handleInputChange(index, "startingyear", e.target.value)
+                    handleInputChange(index, "syear", e.target.value)
                   }
                 >
                   <option value="">Select Year</option>
@@ -465,10 +506,10 @@ const Form = ({RID}) => {
                 </select>
               </td>
               <td>
-                <select class="def_input select-option"
+                <select class="def_input select-option sizing"
                   value={row.cyear}
                   onChange={(e) =>
-                    handleInputChange(index, "completionyear", e.target.value)
+                    handleInputChange(index, "cyear", e.target.value)
                   }
                 >
                   <option value="">Select Year</option>
@@ -478,7 +519,7 @@ const Form = ({RID}) => {
                 </select>
               </td>
               <td>
-                <select class="def_input select-option"
+                <select class="def_input select-option sizing"
                   value={row.status}
                   onChange={(e) =>
                     handleInputChange(index, "status", e.target.value)
@@ -490,7 +531,7 @@ const Form = ({RID}) => {
                 </select>
               </td>
               <td>
-                <input class="def_input "
+                <input class="def_input sizing "
                   type="text"
                   value={row.percentage}
                   onChange={(e) =>
@@ -503,8 +544,67 @@ const Form = ({RID}) => {
         </tbody>
       </table>
        )}
+       
       <button onClick={handleAddRow}>Add Row</button><br></br>
-      <div className="field def_input"v>
+      <div className="field">
+  {previewMode ? (
+    <>
+      Desired Month of Internship: <span>{formData.desiredMonth}</span>
+    </>
+  ) : (
+    <>
+    <div className="flex">
+     <div className="h"> Desired Month of Internship: </div>
+     <div className="y"><select
+        className="def_input"
+        name="desiredMonth"
+        onChange={handleChange}
+        value={formData.desiredMonth}
+        required
+      >
+        <option value="">Select Month</option>
+        {getCurrentMonthPlusTwoOptions().map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select></div></div>
+    </>
+  )}
+  <br></br>
+  {previewMode ? (
+    <>
+      Area Of Interest: <span>{formData.AreaOptions}</span>
+    </>
+  ) : (
+    <>
+    <div className="flex">
+    <div>Area Of Interest:</div>
+    <div>   <select
+              className="def_input"
+              name="Areaofinterest"
+              value={formData.AreaOptions}
+              onChange={(e) =>
+                handleIChange('AreaOptions', e.target.value)
+              }
+              style={{ width: "100%" }}
+              required
+            >            
+  <option value="">Select Area of Interest</option>
+  {AreaOptions.map((option) => (
+    <option key={option} value={option}>
+      {option}
+    </option>
+  ))}
+</select>
+</div></div>
+              </>)}
+  
+ 
+
+  <div style={{ fontSize: '16px', marginTop:'3%'}}>Date: {new Date().toLocaleDateString()}</div>
+</div>
+      <div className="field def_input">
         <label>Upload Resume:</label>
         <input
           type="file"
@@ -520,7 +620,7 @@ const Form = ({RID}) => {
           <button className="field form-button" type="button" onClick={handlePreview}>
             Edit
           </button>
-        ) : (
+        ) : ( 
           <button type="button" className="field form-button" onClick={handlePreview}>
             Preview
           </button>
