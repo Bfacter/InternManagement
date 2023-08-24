@@ -5,7 +5,8 @@
     width: 64px;
 }
 .nav{
-    width: 100%;
+    width: 70%;
+    margin: auto;
 }
 .Mainlink{
     margin-right: 50px;
@@ -93,9 +94,8 @@
     margin-top: 10px;
 }
 .container{
-    width:1500px;
-    margin-left: auto;
-    margin-right: auto;
+width: 100%;
+margin: auto;
 }
 .line-2{
     display: flex;
