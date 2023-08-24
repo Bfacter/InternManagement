@@ -6,7 +6,7 @@ const LoginForm = ({ className,goToForm,goToRegistration}) => {
     Email: "",
     password: "",
   });
-
+  const [lockoutMessage, setLockoutMessage] = useState(""); // New state for lockout message
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -24,28 +24,25 @@ const LoginForm = ({ className,goToForm,goToRegistration}) => {
       );
 
       window.alert("Login Succesful!");
-      // console.log(response.data.RID);
 
       goToForm(response.data.RID);
       
     } catch (error) {
-      window.alert("Invalid Credentials")
-      console.error("Error logging in:", error.response.data.message);
+      if (error.response.status === 401) {
+        if (error.response.data.message.includes("locked out")) {
+          setLockoutMessage(error.response.data.message);
+        } else {
+          window.alert("Invalid Credentials");
+        }
+      } else {
+        window.alert("Error logging in:");
+      }
     }
   };
 
   return (
     <div className="Mainloginpage">
-      {/* <div className="box">
-        <div className="nav-bar">
-          <div className="div1">
-            <a href="">Apply Online</a>
-          </div>
-          <div className="div2">
-            <a href="">Print Application</a>
-          </div>
-        </div>
-      </div> */}
+
       <div className={`side-bar ${className}`}>
         <div className="overlap">
           <img
@@ -87,6 +84,7 @@ const LoginForm = ({ className,goToForm,goToRegistration}) => {
               <button href="" type="submit" className="login-2">
                 Login
               </button>
+              {lockoutMessage && <p className="lockout-message">{lockoutMessage}</p>}
             </div>
             {/* INSTRUCTIONS AND GUIDELINES */}
             <div className="overlap2">

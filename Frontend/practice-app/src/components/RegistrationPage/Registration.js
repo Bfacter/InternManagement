@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./RegistrationStyle.css";
-
+import  Captcha from './Captcha.js';
 
 import {
   isFNameValid,
@@ -19,7 +19,7 @@ const RegistrationForm = ({goToLogin}) => {
     password: "",
     confirmPassword: "",
   });
-
+  const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
   const [passwordValid, setPasswordValid] = useState(true);
   const [ageValid, setAgeValid] = useState(true);
   const [emailValid, setEmailValid] = useState(true);
@@ -97,7 +97,12 @@ const RegistrationForm = ({goToLogin}) => {
       window.alert("Name must be in correct format.");
       return;
     }
-   
+    if (!isCaptchaVerified) {
+      window.alert("Invalid CAPTCHA. Please verify the CAPTCHA.");
+      return;
+    }
+  
+ 
   
     try {
       await axios.post("http://localhost:4444/register", formData);
@@ -209,11 +214,11 @@ const RegistrationForm = ({goToLogin}) => {
               required
             />
           </div>
-         
+          <Captcha setIsCaptchaVerified={setIsCaptchaVerified}/>
 
           <div className="buttonflex">
            
-            <button class="register-button" type="submit"  >Register</button>
+          <button className="register-button" type="submit" disabled={!isCaptchaVerified}>Register</button><br></br>
             <div className="ptext"><p>Already registered? <button onClick={goToLogin}>Login here</button></p></div>
           </div>
         </form>

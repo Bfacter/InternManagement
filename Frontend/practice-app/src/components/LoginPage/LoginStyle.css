@@ -250,6 +250,7 @@
     top: 251px;
     white-space: nowrap;
     width: 234px;
+    margin-top: 5%;
   }
   
  .text-wrapper {
@@ -310,5 +311,14 @@
     width: 37px;
     border: none;
     background-color:#e0e0e0;
+  }
+  .lockout-message {
+    color: red; 
+    font-size: 12px; 
+    margin-top: 35%; 
+    width:300%;
+    margin-left: -85%;
+    text-align: center;
+    /* border:1px solid black; */
   }
   

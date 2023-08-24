@@ -1,99 +1,151 @@
 .MainPage{
-    margin-top: 10px;
-    width:80%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 143px;
+  margin-top: 10px;
+  width:80%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 143px;
 }
 
 .heading {
-    background-color: #3b5998;
-    border-radius: 46px;
-    box-shadow: 0px 4px 19px 2px #00000080;
-    left: 0;
-    top: 0;
-    bottom: 0;
-  }
-  
+  background-color: #3b5998;
+  border-radius: 46px;
+  box-shadow: 0px 4px 19px 2px #00000080;
+  left: 0;
+  top: 0;
+  bottom: 0;
+}
+
 .headingtext{
-    color: #ffffff;
-    font-family:Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 30px;
-    font-weight: 700;
-    text-align: center;
-    padding: 0.7%;
-  } 
+  color: #ffffff;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  text-align: center;
+  padding: 0.7%;
+} 
 .reg_form{
-    width:80%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: -10px;
-    height:600px;
-  }
-  .def_input{
-    width: 200px;
-  padding: 10px;
+  width:80%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: -10px;
+  height:600px;
+}
+.def_input{
+  width: 200px;
+padding: 10px;
+font-size: 16px;
+border: 1px solid #ccc;
+border-radius: 5px;
+outline: none; 
+}
+.def_input:focus {
+  border-color: #007bff; 
+  box-shadow: 0 0 5px #007bff;
+}
+
+.def_input::placeholder {
+  color: #999; 
+}
+.def_input:disabled {
+  background-color: #f2f2f2; 
+  color: #777; 
+}
+#Email{
+  width:25%;
+}
+#Fname, #Dob, #Email, #password, #confirmPassword{
+  margin-top: 3%;
+}
+label{
+  font-size:x-large;
+}
+.register-button {
+  display: inline-block;
+  padding: 12px 20px;
+  background-color: #3b5998;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
   font-size: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease-in-out;
+}
+.register-button:hover {
+  background-color: #304e87;
+}
+.buttonflex{
+  display: flex;
+  width:80%;
+  height: 10%;
+  margin: auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* height: 100vh; */
+  max-height: fit-content;
+  margin-top: 80px;
+  margin-bottom: 80px;
+}
+
+.buttonflex p {
+  margin-bottom: 10px; 
+}
+form{
+  height:50%;
+}
+
+.captcha{
+  margin: 15px 0px;
+  width: 50%;
+}
+.MainPage .captcha .preview{
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  font-weight: normal;
+  letter-spacing: 2px;
+  transform:  skewX(10deg) ;
+  color: #333;
+  background-color: #f5f5f5;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+  opacity: 0.9;
+  transition: transform 0.3s ease;
+  user-select: none;
+  background-image: url('https://img.freepik.com/free-vector/seamless-grainy-texture-background_1409-2115.jpg');
+  background-size: cover;
+}
+.MainPage .captcha .preview span{
+  display:inline-block;
+  user-select: none;
+}
+.captcha .captcha-form{
+  display:flex;
+}
+.captcha .captcha-form input{
+  width:100%;
+  padding:8px;
   border: 1px solid #ccc;
   border-radius: 5px;
   outline: none; 
-  }
-  .def_input:focus {
-    border-color: #007bff; 
-    box-shadow: 0 0 5px #007bff;
-  }
-  
-  .def_input::placeholder {
-    color: #999; 
-  }
-  .def_input:disabled {
-    background-color: #f2f2f2; 
-    color: #777; 
-  }
-  #Email{
-    width:25%;
-  }
-  #Fname, #Dob, #Email, #password, #confirmPassword{
-    margin-top: 3%;
-  }
-  label{
-    font-size:x-large;
-  }
-  .register-button {
-    display: inline-block;
-    padding: 12px 20px;
-    background-color: #3b5998;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background-color 0.3s ease-in-out;
-  }
-  .register-button:hover {
-    background-color: #304e87;
-  }
-  .buttonflex{
-    display: flex;
-    width:80%;
-    height: 10%;
-    margin: auto;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    /* height: 100vh; */
-    max-height: fit-content;
-    margin-top: 80px;
-    margin-bottom: 80px;
-  }
-  
-  .buttonflex p {
-    margin-bottom: 10px; 
-  }
-  form{
-    height:50%;
-  }
-  
-  
-  
+  height:29px;
+}
+.captcha .captcha-form .captcha-refresh{
+  width:60px;
+  border:none;
+  outline:none;
+  background: #888;
+  color: #eee;
+  cursor: pointer;
+}
+#succesBTN{
+height:46px;
+width:30%;
+
+color: #fff;
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+font-size: 16px;
+transition: background-color 0.3s ease;
+}

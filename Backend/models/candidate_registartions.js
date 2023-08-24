@@ -38,6 +38,13 @@ statusofregistration:{
 time_of_registration:{
    type:Date,
    default: Date.now()
-}
+},loginAttempts: {
+    type: Number,
+    default: 0
+  },
+  loginLockUntil: {
+    type: Date,
+    default: null
+  }
 })
 module.exports = mongoose.model('candidateRegistrations',candidateRegistrationsSchema);
