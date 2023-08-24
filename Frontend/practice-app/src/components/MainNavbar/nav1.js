@@ -6,9 +6,9 @@ import FontSizeControl from './FontSizeControl';
   return(
  
   <div className="container">
-  <div className="nav">
     <header className="header">
         <div className="line-1">
+          <div className="navbar-right">
           <img className="indian-flag" alt="Indian flag" src="/images/indian-flag.png" />
           <p className="Mainlink>"><a className="NATIONAL-PORTAL-OF" href="https://www.india.gov.in/"> NATIONAL PORTAL OF INDIA</a></p>
           <div className="space_karo">
@@ -18,6 +18,7 @@ import FontSizeControl from './FontSizeControl';
             <a href="https://www.instagram.com/niti.aayog/"><img className="aa instagram" alt="Instagram" src="/images/instagram.png" /></a>
             <a href="https://www.facebook.com/NITIAayog/"><img className="aa facebook" alt="Facebook" src="/images/facebook.png" /></a>
           </div>    
+          </div>
             <div className="navbar-left">
                <FontSizeControl />
             </div>
@@ -30,7 +31,7 @@ import FontSizeControl from './FontSizeControl';
         
     </header>
     
-  </div>
+ 
   </div>  )  
 }
 export default PageNav;

@@ -4,19 +4,21 @@
     top: 3px;
     width: 64px;
 }
-.nav{
-    width: 70%;
+.header{
+    width: 80%;
     margin: auto;
 }
-.Mainlink{
-    margin-right: 50px;
-    width: 50px;
-    border: 2px solid black;
-
+.nav{
+    width: 100%;
+}
+.navbar-right{
+    display: flex;
 }
 .line-1{
     margin-top: 10px;
+    width: 100%;
     display: flex;
+    justify-content: space-between;
 }
 .NATIONAL-PORTAL-OF {
     color: #3b5998;
@@ -65,7 +67,7 @@
     top: 3px;
     margin-top: 10px;
     width: 64px;
-    margin-left: 10px;
+    /* margin-left: 10px; */
     margin-right:5px;
   }
 .twitter {
@@ -82,9 +84,7 @@
     margin-left: 10px;
     margin-top: 10px;
 }
-.navbar-left {
-    margin-left: 50%;
-}
+
   
 .font-size-control button {
     margin-right: 5px;
@@ -94,14 +94,15 @@
     margin-top: 10px;
 }
 .container{
-width: 100%;
-margin: auto;
+    width:90%;
+   margin: auto;
 }
 .line-2{
     display: flex;
-    width:100px;
+    width:100%;
     align-items: center;
-    gap: 340px;
+    justify-content: space-between;
+    /* gap: 340px; */
 }
 .h-1 {
     color: #3b5998;
@@ -123,9 +124,62 @@ margin: auto;
     width: 171px;
 }
 .image {
-    height: 178px;
-    left:2%;
-    top: 75px;
-    width: 243px;
+    height: 190px;
+    left: 97px;
+    top: 76px;
+    width: 171px;
     
  }
+ @media screen and (max-width: 768px) {
+    /* Adjustments for smaller screens */
+    .nav {
+      display: flex;
+      flex-direction: column;
+    }
+  
+    .line-1 {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .nav-bar {
+      margin-top: 10px;
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .space_karo {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+  
+    .navbar-left {
+      margin-left: 0;
+      margin-top: 10px;
+    }
+  
+    .line-2 {
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+  
+    .h-1 {
+      font-size: 28px;
+      text-align: center;
+      margin: auto;
+    }
+  
+    .img {
+      height: auto;
+      width: 120px;
+      margin: 0 auto;
+    }
+  
+    .image {
+      height: auto;
+      width: 120px;
+      margin: 0 auto;
+    }
+  }
