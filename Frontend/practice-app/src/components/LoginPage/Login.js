@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./LoginStyle.css";
 const LoginForm = ({ className, goToForm, goToRegistration }) => {
@@ -38,6 +38,17 @@ const LoginForm = ({ className, goToForm, goToRegistration }) => {
       }
     }
   };
+  // useEffect(() => {
+  //   const handleKeyPress = (e) => {
+  //     if (e.key === "Enter") {
+  //       handleSubmit(e);
+  //     }
+  //   };
+  //   document.addEventListener("keydown", handleKeyPress);
+  //   return () => {
+  //     document.removeEventListener("keydown", handleKeyPress);
+  //   };
+  // }, []);
 
   return (
     <div className="Mainloginpage">
