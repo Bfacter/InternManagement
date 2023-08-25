@@ -23,7 +23,7 @@ const LoginForm = ({ className, goToForm, goToRegistration }) => {
         formData
       );
 
-      window.alert("Login Succesful!");
+      window.alert("Login Successful!");
 
       goToForm(response.data.RID);
     } catch (error) {

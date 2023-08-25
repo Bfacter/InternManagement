@@ -224,8 +224,11 @@ const Form = ({ RID, goToLogin }) => {
           Application form for Internship in Niti Aayog
         </h1>
       </div>
-      <button onClick={handleLogout}>Logout</button>
-
+      <div className="logout">
+        <button className="logout-btn" onClick={handleLogout}>
+          Logout
+        </button>
+      </div>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="field-container">
           <div className="field">
@@ -542,7 +545,7 @@ const Form = ({ RID, goToLogin }) => {
                   </td>
                   <td>
                     <select
-                      Name="def_input select-option sizing"
+                      className="def_input select-option sizing"
                       value={row.status}
                       onChange={(e) =>
                         handleInputChange(index, "status", e.target.value)

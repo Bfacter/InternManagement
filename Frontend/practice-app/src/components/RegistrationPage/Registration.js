@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./RegistrationStyle.css";
-import  Captcha from './Captcha.js';
+import Captcha from "./Captcha.js";
 
 import {
   isFNameValid,
@@ -9,8 +9,7 @@ import {
   isAgeVaild,
   isPasswordValid,
 } from "../utils/typeCheckUtil";
-const RegistrationForm = ({goToLogin}) => {
-  
+const RegistrationForm = ({ goToLogin }) => {
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [formData, setFormData] = useState({
     Fname: "",
@@ -77,7 +76,7 @@ const RegistrationForm = ({goToLogin}) => {
       window.alert("You must be 18 years old or above to register");
       return;
     }
-    if(!(formData.password===formData.confirmPassword)){
+    if (!(formData.password === formData.confirmPassword)) {
       window.alert("Password and confirm password dont match");
       return;
     }
@@ -93,7 +92,7 @@ const RegistrationForm = ({goToLogin}) => {
       window.alert("Email must be in correct format.");
       return;
     }
-    if(!isFNameValid(formData.Fname)){
+    if (!isFNameValid(formData.Fname)) {
       window.alert("Name must be in correct format.");
       return;
     }
@@ -101,21 +100,26 @@ const RegistrationForm = ({goToLogin}) => {
       window.alert("Invalid CAPTCHA. Please verify the CAPTCHA.");
       return;
     }
-  
- 
-  
+
     try {
       await axios.post("http://localhost:4444/register", formData);
       console.log("Registration successful!");
       window.alert("Registration successful! You can now login.");
       setRegistrationSuccess(true);
-
     } catch (error) {
-      console.log("Error", error);
+      if (
+        error.response.status === 400 &&
+        error.response.data.message === "Email already registered"
+      ) {
+        window.alert("This email address is already registered.");
+      } else if (error.response.data.message === "User already exists") {
+        window.alert("User Already Registered");
+      } else {
+        console.log("Error", error);
+      }
     }
   };
   if (registrationSuccess) {
-
     window.location.href = "/login";
   }
 
@@ -126,28 +130,30 @@ const RegistrationForm = ({goToLogin}) => {
       </div>
       <div className="reg_form">
         <form onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="Fname">Full Name: </label>
-              <input class="def_input"
-                type="text"
-                id="Fname"
-                name="Fname"
-                value={formData.Fname}
-                onChange={handleChange}
-                onBlur={handleFNameBlur}
-                required
-              />
-              {!fnameValid && (
-                <p style={{ color: "red", fontSize: "12px" }}>
-                  First letter should be capital<br></br>
-                  Only alphabets are allowed.
-                </p>
-              )}
-            </div>
-          <br/>
+          <div>
+            <label htmlFor="Fname">Full Name: </label>
+            <input
+              class="def_input"
+              type="text"
+              id="Fname"
+              name="Fname"
+              value={formData.Fname}
+              onChange={handleChange}
+              onBlur={handleFNameBlur}
+              required
+            />
+            {!fnameValid && (
+              <p style={{ color: "red", fontSize: "12px" }}>
+                First letter should be capital<br></br>
+                Only alphabets are allowed.
+              </p>
+            )}
+          </div>
+          <br />
           <div>
             <label htmlFor="Dob">Date of Birth: </label>
-            <input class="def_input"
+            <input
+              class="def_input"
               type="date"
               id="Dob"
               name="Dob"
@@ -164,7 +170,8 @@ const RegistrationForm = ({goToLogin}) => {
           </div>
           <div>
             <label htmlFor="Email">Email: </label>
-            <input class="def_input"
+            <input
+              class="def_input"
               type="email"
               id="Email"
               name="Email"
@@ -181,7 +188,8 @@ const RegistrationForm = ({goToLogin}) => {
           </div>
           <div>
             <label htmlFor="password">Password: </label>
-            <input class="def_input"
+            <input
+              class="def_input"
               type="password"
               id="password"
               name="password"
@@ -205,7 +213,8 @@ const RegistrationForm = ({goToLogin}) => {
           </div>
           <div>
             <label htmlFor="confirmPassword">Confirm Password: </label>
-            <input class="def_input"
+            <input
+              class="def_input"
               type="password"
               id="confirmPassword"
               name="confirmPassword"
@@ -214,12 +223,22 @@ const RegistrationForm = ({goToLogin}) => {
               required
             />
           </div>
-          <Captcha setIsCaptchaVerified={setIsCaptchaVerified}/>
+          <Captcha setIsCaptchaVerified={setIsCaptchaVerified} />
 
           <div className="buttonflex">
-           
-          <button className="register-button" type="submit" disabled={!isCaptchaVerified}>Register</button><br></br>
-            <div className="ptext"><p>Already registered? <button onClick={goToLogin}>Login here</button></p></div>
+            <button
+              className="register-button"
+              type="submit"
+              disabled={!isCaptchaVerified}>
+              Register
+            </button>
+            <br></br>
+            <div className="ptext">
+              <p>
+                Already registered?{" "}
+                <button onClick={goToLogin}>Login here</button>
+              </p>
+            </div>
           </div>
         </form>
       </div>
