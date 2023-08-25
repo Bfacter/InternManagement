@@ -42,15 +42,17 @@ const LoginForm = ({ className,goToForm,goToRegistration}) => {
 
   return (
     <div className="Mainloginpage">
+     
 
       <div className={`side-bar ${className}`}>
         <div className="overlap">
+          <div>
           <img
             className="rectangle"
             alt="Rectangle"
             src="/images/rectangle-4.jpg"
-          />
-          <div className="div" />
+          /></div>
+          <div className="div">
           <form className="login" onSubmit={handleSubmit}>
             <label className="email-id">Email Id:</label>
             <input
@@ -109,6 +111,7 @@ const LoginForm = ({ className,goToForm,goToRegistration}) => {
               </div>
             </div>
           </form>
+          </div>
         </div>
       </div>
     </div>

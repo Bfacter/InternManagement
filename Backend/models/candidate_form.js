@@ -34,7 +34,13 @@ const formSchema=mongoose.Schema({
         type:Number,
         required:true},
     resume:{ 
-        type:Buffer,
+        type:String,
         required:true},
+    desiredMonth:{
+        type:String,
+        required:true},
+    AreaOptions:{
+        type:String,
+        required:true}
 })
 module.exports=mongoose.model('formDetails',formSchema);

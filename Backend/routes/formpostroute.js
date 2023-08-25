@@ -26,6 +26,8 @@ router.post('/post',upload.single('resume'), async (req,res)=>{
           pincode,
           phone,
           mobile,
+          desiredMonth,
+          AreaOptions
         } = req.body;
     
         // Create a new form entry in your database
@@ -40,7 +42,9 @@ router.post('/post',upload.single('resume'), async (req,res)=>{
           pincode,
           phone,
           mobile,
-          resume: req.file.filename 
+          resume: req.file.filename ,
+          desiredMonth,
+          AreaOptions
         });
     
         await newFormEntry.save();

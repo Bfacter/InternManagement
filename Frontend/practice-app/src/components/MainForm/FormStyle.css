@@ -25,6 +25,13 @@
   .field{
     margin-top: 3%;
     width:30%;
+   
+  }
+  .border{
+    border-radius:5px ;
+    outline: none; 
+    border: 1px solid #ccc;
+    padding:1%;
   }
   .def_input{
     width: 200px;

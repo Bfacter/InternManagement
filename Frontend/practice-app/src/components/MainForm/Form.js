@@ -6,7 +6,7 @@ import "./FormStyle.css";
 
 import { getCurrentMonthPlusTwoOptions } from '../utils/dateUtils'
 
-const Form = ({RID}) => {
+const Form = ({RID,goToLogin}) => {
   const [candidateData, setCandidateData] = useState({});
   const[previewMode,setPreviewMode]=useState(false);
   const [fileError, setFileError] = useState("");
@@ -57,8 +57,6 @@ const Form = ({RID}) => {
     });
   };
   
-  
-
   const namehandleChange=(e)=>{
     const{name,value}=e.target;
     const newValue = value.replace(/[^a-zA-Z ]/g, '');
@@ -192,16 +190,23 @@ const Form = ({RID}) => {
     });
     setRows(updatedRows);
   };
+  const handleLogout=()=>{
+    window.alert("Logging Out")
+    goToLogin();
+  }
   
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormData({
+      ...formData,
+      // Update the rest of the fields here
+    });
     try {
       const formDataToSend = new FormData();
       for (let key in formData) {
         formDataToSend.append(key, formData[key]);
       }
-      // formDataToSend.append("resume", formData.resume);
       await axios.post("http://localhost:4444/form/post", formDataToSend);
 
 
@@ -210,8 +215,6 @@ const Form = ({RID}) => {
       console.log("Error", error);
     }
   };
- 
-
   const handlePreview = () => {
     setPreviewMode(!previewMode);
   };
@@ -221,7 +224,11 @@ const Form = ({RID}) => {
       <div className="heading">
         <h1 className="headingtext">Application form for Internship in Niti Aayog</h1>
       </div>
-      <form onSubmit={handleSubmit} encType="multipart/foorm-data">
+      <button onClick={handleLogout}>
+          Logout
+        </button>
+     
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
       <div className="field-container">
         <div className="field">
           <label>Title:</label>
@@ -461,7 +468,7 @@ const Form = ({RID}) => {
               <td>{row.sno}</td>
               <td>
               {/* Dropdown for Examination Passed */}
-              <select class="def_input sizing"
+              <select className="def_input sizing"
                 value={row.examination}
                 onChange={(e) =>
                   handleInputChange(index, 'examination', e.target.value)
@@ -474,9 +481,9 @@ const Form = ({RID}) => {
                   </option>
                 ))}
               </select>
-            </td>
+              </td>
               <td>
-                <input class="def_input sizing"
+                <input className="def_input sizing"
                   type="text"
                   value={row.subject}
                   onChange={(e) =>
@@ -485,7 +492,7 @@ const Form = ({RID}) => {
                 />
               </td>
               <td>
-                <input class="def_input sizing"
+                <input className="def_input sizing"
                   type="text"
                   value={row.board}
                   onChange={(e) =>
@@ -494,7 +501,7 @@ const Form = ({RID}) => {
                 />
               </td>
               <td>
-                <select class="def_input select-option sizing"
+                <select className="def_input select-option sizing"
                   value={row.syear}
                   onChange={(e) =>
                     handleInputChange(index, "syear", e.target.value)
@@ -507,7 +514,7 @@ const Form = ({RID}) => {
                 </select>
               </td>
               <td>
-                <select class="def_input select-option sizing"
+                <select className="def_input select-option sizing"
                   value={row.cyear}
                   onChange={(e) =>
                     handleInputChange(index, "cyear", e.target.value)
@@ -520,7 +527,7 @@ const Form = ({RID}) => {
                 </select>
               </td>
               <td>
-                <select class="def_input select-option sizing"
+                <select Name="def_input select-option sizing"
                   value={row.status}
                   onChange={(e) =>
                     handleInputChange(index, "status", e.target.value)
@@ -532,7 +539,7 @@ const Form = ({RID}) => {
                 </select>
               </td>
               <td>
-                <input class="def_input sizing "
+                <input className="def_input sizing "
                   type="text"
                   value={row.percentage}
                   onChange={(e) =>
@@ -605,7 +612,7 @@ const Form = ({RID}) => {
 
   <div style={{ fontSize: '16px', marginTop:'3%'}}>Date: {new Date().toLocaleDateString()}</div>
 </div>
-      <div className="field def_input">
+      <div className="field border">
         <label>Upload Resume:</label>
         <input
           type="file"
@@ -615,7 +622,7 @@ const Form = ({RID}) => {
           // required
         />
         {fileError && <p style={{ color: "red" }}>{fileError}</p>}
-        </div>
+         </div>
       
         {previewMode ? (
           <button className="field form-button" type="button" onClick={handlePreview}>
