@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./LoginStyle.css";
-const LoginForm = ({ className,goToForm,goToRegistration}) => {
+const LoginForm = ({ className, goToForm, goToRegistration }) => {
   const [formData, setFormData] = useState({
     Email: "",
     password: "",
@@ -26,7 +26,6 @@ const LoginForm = ({ className,goToForm,goToRegistration}) => {
       window.alert("Login Succesful!");
 
       goToForm(response.data.RID);
-      
     } catch (error) {
       if (error.response.status === 401) {
         if (error.response.data.message.includes("locked out")) {
@@ -42,17 +41,14 @@ const LoginForm = ({ className,goToForm,goToRegistration}) => {
 
   return (
     <div className="Mainloginpage">
-     
-
       <div className={`side-bar ${className}`}>
         <div className="overlap">
-          <div>
           <img
             className="rectangle"
             alt="Rectangle"
             src="/images/rectangle-4.jpg"
-          /></div>
-          <div className="div">
+          />
+          <div className="div" />
           <form className="login" onSubmit={handleSubmit}>
             <label className="email-id">Email Id:</label>
             <input
@@ -76,7 +72,7 @@ const LoginForm = ({ className,goToForm,goToRegistration}) => {
             <div className="not-registered">
               <span className="text-wrapper">Not registered? </span>
               <span className="span">
-              <button onClick={goToRegistration}>Register Here</button>
+                <button onClick={goToRegistration}>Register Here</button>
               </span>
             </div>
             <div className="overlap-group">
@@ -86,7 +82,9 @@ const LoginForm = ({ className,goToForm,goToRegistration}) => {
               <button href="" type="submit" className="login-2">
                 Login
               </button>
-              {lockoutMessage && <p className="lockout-message">{lockoutMessage}</p>}
+              {lockoutMessage && (
+                <p className="lockout-message">{lockoutMessage}</p>
+              )}
             </div>
             {/* INSTRUCTIONS AND GUIDELINES */}
             <div className="overlap2">
@@ -102,16 +100,15 @@ const LoginForm = ({ className,goToForm,goToRegistration}) => {
                   <div className="INSTRUCTIONS">INSTRUCTIONS</div>
                 </div>
                 <div className="download">
-                <a href="/PDFs/INSTRUCTIONS_INTERNSHIP_NITI_SCHEME.pdf">
-                  Download Instructions for filling the <br />
-                  online Internship Application. 
-                </a>
-              </div>
+                  <a href="/PDFs/INSTRUCTIONS_INTERNSHIP_NITI_SCHEME.pdf">
+                    Download Instructions for filling the <br />
+                    online Internship Application.
+                  </a>
+                </div>
                 <div className="GUIDELINES">GUIDELINES</div>
               </div>
             </div>
           </form>
-          </div>
         </div>
       </div>
     </div>
