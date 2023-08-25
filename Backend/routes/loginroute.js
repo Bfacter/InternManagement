@@ -1,19 +1,16 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const bcrypt = require('bcrypt');
-const candidateRegistrations = require('../models/candidate_registartions');
+const bcrypt = require("bcrypt");
+const candidateRegistrations = require("../models/candidate_registartions");
 
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const { Email, password } = req.body;
-  
 
     const candidate = await candidateRegistrations.findOne({ Email });
 
-
     if (!candidate) {
-      
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
     const currentTime = new Date().getTime();
@@ -35,17 +32,18 @@ router.post('/', async (req, res) => {
         const lockUntil = new Date();
         lockUntil.setHours(lockUntil.getHours() + 24);
         candidate.loginLockUntil = lockUntil;
-        
+
         await candidate.save();
-        
+
         return res.status(401).json({
-          message: 'Incorrect password. You will be locked out for the next 24 hours.',
+          message:
+            "Incorrect password. You will be locked out for the next 24 hours.",
         });
       }
 
       await candidate.save();
 
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
     // If login is successful, reset loginAttempts and loginLockUntil
@@ -53,9 +51,9 @@ router.post('/', async (req, res) => {
     candidate.loginLockUntil = null;
     await candidate.save();
 
-    res.status(200).json({ message: 'Login successful', RID: candidate.RID });
+    res.status(200).json({ message: "Login successful", RID: candidate.RID });
   } catch (error) {
-    res.status(500).json({ message: 'Error logging in', error: error.message });
+    res.status(500).json({ message: "Error logging in", error: error.message });
   }
 });
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const FontSizeControl = () => {
   const [fontSize, setFontSize] = useState(16); // Initial font size
