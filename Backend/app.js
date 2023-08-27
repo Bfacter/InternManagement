@@ -17,6 +17,7 @@ const port = 4444;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static("public"));
+app.use(express.urlencoded({ extended: false }));
 
 app.use("/api/options", optionsFromBackend);
 app.use("/api/areaoptions", areaBackend);
@@ -24,7 +25,7 @@ app.use("/api/areaoptions", areaBackend);
 app.use("/register", registrationRoutes);
 app.use("/login", loginRoute);
 app.use("/form", formgetRoute);
-app.use("/form/post", formpostRoute);
+app.use("/p", formpostRoute);
 
 connectDB().then(() => {
   console.log("connectedDB");

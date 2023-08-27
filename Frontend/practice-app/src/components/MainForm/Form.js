@@ -24,7 +24,7 @@ const Form = ({ RID, goToLogin }) => {
     pincode: "",
     phone: "",
     mobile: "",
-    resume: "",
+    resume: null,
     desiredMonth: "",
     AreaOptions: "",
   });
@@ -104,15 +104,29 @@ const Form = ({ RID, goToLogin }) => {
         setFormData({
           ...formData,
           resume: file,
+          resumeFileName: file.name, // Store the file name
         });
         setFileError(""); // Clear any previous errors
       } else {
+        setFormData({
+          ...formData,
+          resume: null, // Reset the resume state
+          resumeFileName: "", // Clear the file name
+        });
         setFileError(
           "Invalid file format or size. Please choose a PDF file of up to 1 MB."
         );
       }
+    } else {
+      // If no file is selected, clear the resume and file name fields
+      setFormData({
+        ...formData,
+        resume: null,
+        resumeFileName: "",
+      });
     }
   };
+
   const dobHandleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -197,22 +211,40 @@ const Form = ({ RID, goToLogin }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setFormData({
-      ...formData,
-      // Update the rest of the fields here
-    });
+
     try {
       const formDataToSend = new FormData();
-      for (let key in formData) {
-        formDataToSend.append(key, formData[key]);
-      }
-      await axios.post("http://localhost:4444/form/post", formDataToSend);
 
+      formDataToSend.append("RID", formData.RID);
+      formDataToSend.append("title", formData.title);
+      formDataToSend.append("fathersname", formData.fathersname);
+      formDataToSend.append("address1", formData.address1);
+      formDataToSend.append("address2", formData.address2);
+      formDataToSend.append("city", formData.city);
+      formDataToSend.append("country", formData.country);
+      formDataToSend.append("pincode", formData.pincode);
+      formDataToSend.append("phone", formData.phone);
+      formDataToSend.append("mobile", formData.mobile);
+      formDataToSend.append("desiredMonth", formData.desiredMonth);
+      formDataToSend.append("AreaOptions", formData.AreaOptions);
+
+      // Append the resume file to the FormData object
+      formDataToSend.append("resume", formData.resume);
+
+      // Set the appropriate headers for multipart/form-data
+      const config = {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      };
+
+      await axios.post("http://localhost:4444/p", formDataToSend, config);
       console.log("Registration successful!");
     } catch (error) {
-      console.log("Error", error);
+      console.error("Error submitting form:", error);
     }
   };
+
   const handlePreview = () => {
     setPreviewMode(!previewMode);
   };
@@ -643,9 +675,12 @@ const Form = ({ RID, goToLogin }) => {
             name="resume"
             onChange={handleFileChange}
             accept=".pdf"
-            // required
+            required
           />
-          {fileError && <p style={{ color: "red" }}>{fileError}</p>}{" "}
+          {fileError && <p style={{ color: "red" }}>{fileError}</p>}
+          {formData.resumeFileName && (
+            <p>Selected Resume: {formData.resumeFileName}</p>
+          )}
         </div>
 
         {previewMode ? (

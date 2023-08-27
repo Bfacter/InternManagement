@@ -3,9 +3,10 @@ const router = express.Router();
 const formDetails = require("../models/candidate_form");
 const multer = require("multer");
 const path = require("path");
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/");
+    cb(null, "./uploads");
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + path.extname(file.originalname));
@@ -13,7 +14,11 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-router.post("/post", upload.single("resume"), async (req, res) => {
+
+router.post("/", upload.single("resume"), async (req, res, next) => {
+  console.log(req.body);
+  console.log(req.file);
+
   try {
     const {
       RID,
@@ -30,7 +35,8 @@ router.post("/post", upload.single("resume"), async (req, res) => {
       AreaOptions,
     } = req.body;
 
-    // Create a new form entry in your database
+    const resumeFileName = req.file.filename;
+
     const newFormEntry = new formDetails({
       RID,
       title,
@@ -42,7 +48,7 @@ router.post("/post", upload.single("resume"), async (req, res) => {
       pincode,
       phone,
       mobile,
-      resume: req.file.filename,
+      resume: resumeFileName,
       desiredMonth,
       AreaOptions,
     });
@@ -55,4 +61,5 @@ router.post("/post", upload.single("resume"), async (req, res) => {
       .json({ message: "Error submitting form data", error: error.message });
   }
 });
+
 module.exports = router;

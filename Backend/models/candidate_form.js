@@ -43,7 +43,7 @@ const formSchema = mongoose.Schema({
   },
   resume: {
     type: String,
-    required: true,
+    // required: true,
   },
   desiredMonth: {
     type: String,
