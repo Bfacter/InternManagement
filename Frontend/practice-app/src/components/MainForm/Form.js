@@ -12,6 +12,7 @@ const Form = ({ RID, goToLogin }) => {
   const [fileError, setFileError] = useState("");
   const [examinationOptions, setExaminationOptions] = useState([]);
   const [AreaOptions, setAreaOptions] = useState([]);
+  const [showSuccessPrompt, setShowSuccessPrompt] = useState(false);
 
   const [formData, setFormData] = useState({
     RID: RID,
@@ -159,6 +160,28 @@ const Form = ({ RID, goToLogin }) => {
     fetchAreaOptions();
   }, []);
 
+  const generateSYearOptions = () => {
+    const currentYear = new Date().getFullYear();
+    const years = [];
+    
+    for (let i = currentYear ; i >= currentYear - 10; i--) {
+      years.push(i.toString());
+    }
+  
+    return years;
+  };
+
+  const generateCYearOptions = () => {
+    const currentYear = new Date().getFullYear();
+    const years = [];
+    
+    for (let i = currentYear+5 ; i >= currentYear -8; i--) {
+      years.push(i.toString());
+    }
+  
+    return years;
+  };
+
   const fetchAreaOptions = async () => {
     try {
       const response = await fetch("http://localhost:4444/api/areaoptions"); // Update with your backend URL
@@ -240,6 +263,13 @@ const Form = ({ RID, goToLogin }) => {
 
       await axios.post("http://localhost:4444/p", formDataToSend, config);
       console.log("Registration successful!");
+      setShowSuccessPrompt(true);
+
+      // Redirect after 3 seconds
+      setTimeout(() => {
+        setShowSuccessPrompt(false); // Clear the prompt
+        goToLogin(); // Redirect to login page
+      }, 3000);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
@@ -550,17 +580,20 @@ const Form = ({ RID, goToLogin }) => {
                     />
                   </td>
                   <td>
-                    <select
-                      className="def_input select-option sizing"
-                      value={row.syear}
-                      onChange={(e) =>
-                        handleInputChange(index, "syear", e.target.value)
-                      }>
-                      <option value="">Select Year</option>
-                      <option value="2022">2022</option>
-                      <option value="2023">2023</option>
-                      {/* Add more years */}
-                    </select>
+                     <select
+                       className="def_input select-option sizing"
+                       value={row.syear}
+                       onChange={(e) =>
+                         handleInputChange(index, "syear", e.target.value)
+                       }>
+                       <option value="">Select Year</option>
+                       {generateSYearOptions().map((year) => (
+                         <option key={year} value={year}>
+                           {year}
+                         </option>
+                       ))}
+                     </select>
+
                   </td>
                   <td>
                     <select
@@ -570,9 +603,11 @@ const Form = ({ RID, goToLogin }) => {
                         handleInputChange(index, "cyear", e.target.value)
                       }>
                       <option value="">Select Year</option>
-                      <option value="2022">2022</option>
-                      <option value="2023">2023</option>
-                      {/* Add more years */}
+                      {generateCYearOptions().map((year) => (
+                         <option key={year} value={year}>
+                           {year}
+                         </option>
+                      ))}
                     </select>
                   </td>
                   <td>
@@ -705,6 +740,12 @@ const Form = ({ RID, goToLogin }) => {
             </button>
           </div>
         )}
+        {showSuccessPrompt && (
+          <script>
+            {window.alert("Form submitted successfully!") }
+          </script>
+        )}
+
       </form>
     </div>
   );
