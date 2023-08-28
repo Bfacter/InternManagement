@@ -163,22 +163,22 @@ const Form = ({ RID, goToLogin }) => {
   const generateSYearOptions = () => {
     const currentYear = new Date().getFullYear();
     const years = [];
-    
-    for (let i = currentYear ; i >= currentYear - 10; i--) {
+
+    for (let i = currentYear; i >= currentYear - 10; i--) {
       years.push(i.toString());
     }
-  
+
     return years;
   };
 
   const generateCYearOptions = () => {
     const currentYear = new Date().getFullYear();
     const years = [];
-    
-    for (let i = currentYear+5 ; i >= currentYear -8; i--) {
+
+    for (let i = currentYear + 5; i >= currentYear - 8; i--) {
       years.push(i.toString());
     }
-  
+
     return years;
   };
 
@@ -192,6 +192,7 @@ const Form = ({ RID, goToLogin }) => {
     }
   };
   const [rows, setRows] = useState([
+    // Initialize with 4 rows
     {
       sno: 1,
       examination: "",
@@ -202,11 +203,8 @@ const Form = ({ RID, goToLogin }) => {
       status: "",
       percentage: "",
     },
-  ]);
-
-  const handleAddRow = () => {
-    const newRow = {
-      sno: rows.length + 1,
+    {
+      sno: 2,
       examination: "",
       subject: "",
       board: "",
@@ -214,9 +212,28 @@ const Form = ({ RID, goToLogin }) => {
       cyear: "",
       status: "",
       percentage: "",
-    };
-    setRows([...rows, newRow]);
-  };
+    },
+    {
+      sno: 3,
+      examination: "",
+      subject: "",
+      board: "",
+      syear: "",
+      cyear: "",
+      status: "",
+      percentage: "",
+    },
+    {
+      sno: 4,
+      examination: "",
+      subject: "",
+      board: "",
+      syear: "",
+      cyear: "",
+      status: "",
+      percentage: "",
+    },
+  ]);
 
   const handleInputChange = (index, field, value) => {
     const updatedRows = rows.map((row, i) => {
@@ -227,6 +244,36 @@ const Form = ({ RID, goToLogin }) => {
     });
     setRows(updatedRows);
   };
+  const handleSubmitEducationalQualification = async () => {
+    try {
+      const educationalQualifications = rows.map((row) => {
+        return {
+          examination: row.examination,
+          subject: row.subject,
+          board: row.board,
+          syear: row.syear,
+          cyear: row.cyear,
+          status: row.status,
+          percentage: row.percentage,
+        };
+      });
+
+      const educationalQualificationData = {
+        RID: RID,
+        educationalQualifications: educationalQualifications,
+      };
+
+      await axios.post(
+        "http://localhost:4444/save-educational-data",
+        educationalQualificationData
+      );
+
+      console.log("Educational qualification data saved successfully!");
+    } catch (error) {
+      console.error("Error saving educational qualification data:", error);
+    }
+  };
+
   const handleLogout = () => {
     window.alert("Logging Out");
     goToLogin();
@@ -262,6 +309,7 @@ const Form = ({ RID, goToLogin }) => {
       };
 
       await axios.post("http://localhost:4444/p", formDataToSend, config);
+      await handleSubmitEducationalQualification();
       console.log("Registration successful!");
       setShowSuccessPrompt(true);
 
@@ -499,29 +547,27 @@ const Form = ({ RID, goToLogin }) => {
         {previewMode ? (
           <table>
             <tbody>
-              {rows.map((row, index) => (
-                <>
-                  <tr>
-                    <th>S.No.</th>
-                    <th>Examination Passed</th>
-                    <th>Subject</th>
-                    <th>Name of Board/University</th>
-                    <th>Year of Joining</th>
-                    <th>Year of Completion</th>
-                    <th>Pursuing/Completed</th>
-                    <th>Percentage</th>
-                  </tr>
-                  <tr key={index}>
-                    <td>{row.sno}</td>
-                    <td>{row.examination}</td>
-                    <td>{row.subject}</td>
-                    <td>{row.board}</td>
-                    <td>{row.cyear}</td>
-                    <td>{row.syear}</td>
-                    <td>{row.status}</td>
-                    <td>{row.percentage}</td>
-                  </tr>
-                </>
+              <tr>
+                <th>S.No.</th>
+                <th>Examination Passed</th>
+                <th>Subject</th>
+                <th>Name of Board/University</th>
+                <th>Year of Joining</th>
+                <th>Year of Completion</th>
+                <th>Pursuing/Completed</th>
+                <th>Percentage</th>
+              </tr>
+              {rows.slice(0, 4).map((row, index) => (
+                <tr key={index}>
+                  <td>{row.sno}</td>
+                  <td>{row.examination}</td>
+                  <td>{row.subject}</td>
+                  <td>{row.board}</td>
+                  <td>{row.cyear}</td>
+                  <td>{row.syear}</td>
+                  <td>{row.status}</td>
+                  <td>{row.percentage}</td>
+                </tr>
               ))}
             </tbody>
           </table>
@@ -580,20 +626,19 @@ const Form = ({ RID, goToLogin }) => {
                     />
                   </td>
                   <td>
-                     <select
-                       className="def_input select-option sizing"
-                       value={row.syear}
-                       onChange={(e) =>
-                         handleInputChange(index, "syear", e.target.value)
-                       }>
-                       <option value="">Select Year</option>
-                       {generateSYearOptions().map((year) => (
-                         <option key={year} value={year}>
-                           {year}
-                         </option>
-                       ))}
-                     </select>
-
+                    <select
+                      className="def_input select-option sizing"
+                      value={row.syear}
+                      onChange={(e) =>
+                        handleInputChange(index, "syear", e.target.value)
+                      }>
+                      <option value="">Select Year</option>
+                      {generateSYearOptions().map((year) => (
+                        <option key={year} value={year}>
+                          {year}
+                        </option>
+                      ))}
+                    </select>
                   </td>
                   <td>
                     <select
@@ -604,9 +649,9 @@ const Form = ({ RID, goToLogin }) => {
                       }>
                       <option value="">Select Year</option>
                       {generateCYearOptions().map((year) => (
-                         <option key={year} value={year}>
-                           {year}
-                         </option>
+                        <option key={year} value={year}>
+                          {year}
+                        </option>
                       ))}
                     </select>
                   </td>
@@ -638,7 +683,6 @@ const Form = ({ RID, goToLogin }) => {
           </table>
         )}
 
-        <button onClick={handleAddRow}>Add Row</button>
         <br></br>
         <div className="field">
           {previewMode ? (
@@ -741,11 +785,8 @@ const Form = ({ RID, goToLogin }) => {
           </div>
         )}
         {showSuccessPrompt && (
-          <script>
-            {window.alert("Form submitted successfully!") }
-          </script>
+          <script>{window.alert("Form submitted successfully!")}</script>
         )}
-
       </form>
     </div>
   );

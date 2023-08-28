@@ -9,7 +9,7 @@ const formgetRoute = require("./routes/formgetroute");
 const formpostRoute = require("./routes/formpostroute");
 const optionsFromBackend = require("./routes/options");
 const areaBackend = require("./routes/areaoptions");
-
+const educationRoute = require("./routes/educationroute");
 const app = express();
 const port = 4444;
 
@@ -26,7 +26,7 @@ app.use("/register", registrationRoutes);
 app.use("/login", loginRoute);
 app.use("/form", formgetRoute);
 app.use("/p", formpostRoute);
-
+app.use("/save-educational-data", educationRoute);
 connectDB().then(() => {
   console.log("connectedDB");
   app.listen(port, () => {
