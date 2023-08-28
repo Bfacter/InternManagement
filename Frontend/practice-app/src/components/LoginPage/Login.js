@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState,useEffect } from "react";
 import axios from "axios";
 import "./LoginStyle.css";
 const LoginForm = ({ className, goToForm, goToRegistration }) => {
@@ -23,7 +23,7 @@ const LoginForm = ({ className, goToForm, goToRegistration }) => {
         formData
       );
 
-      window.alert("Login Successful!");
+      window.alert("Login Succesful!");
 
       goToForm(response.data.RID);
     } catch (error) {
@@ -38,6 +38,7 @@ const LoginForm = ({ className, goToForm, goToRegistration }) => {
       }
     }
   };
+ 
   // useEffect(() => {
   //   const handleKeyPress = (e) => {
   //     if (e.key === "Enter") {
@@ -49,7 +50,7 @@ const LoginForm = ({ className, goToForm, goToRegistration }) => {
   //     document.removeEventListener("keydown", handleKeyPress);
   //   };
   // }, []);
-
+  
   return (
     <div className="Mainloginpage">
       <div className={`side-bar ${className}`}>
