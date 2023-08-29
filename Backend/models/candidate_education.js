@@ -9,6 +9,7 @@ const educationalQualificationSchema = new mongoose.Schema({
   cyear: { type: String, required: true },
   status: { type: String, required: true },
   percentage: { type: Number, required: true },
+  semester: { type: String },
 });
 
 const EducationalQualification = mongoose.model(

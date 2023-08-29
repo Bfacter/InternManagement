@@ -17,7 +17,8 @@ router.post("/", async (req, res) => {
           qualification.syear ||
           qualification.cyear ||
           qualification.status ||
-          qualification.percentage
+          qualification.percentage ||
+          (qualification.status === "Pursuing" && qualification.semester) // Include semester only if status is "Pursuing"
         );
       }
     );

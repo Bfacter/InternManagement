@@ -10,6 +10,16 @@ const Form = ({ RID, goToLogin }) => {
   const [candidateData, setCandidateData] = useState({});
   const [previewMode, setPreviewMode] = useState(false);
   const [fileError, setFileError] = useState("");
+  const semesterOptions = [
+    "Sem1",
+    "Sem2",
+    "Sem3",
+    "Sem4",
+    "Sem5",
+    "Sem6",
+    "Sem7",
+    "Sem8",
+  ];
 
   const [AreaOptions, setAreaOptions] = useState([]);
   const [showSuccessPrompt, setShowSuccessPrompt] = useState(false);
@@ -214,6 +224,7 @@ const Form = ({ RID, goToLogin }) => {
       cyear: "",
       status: "",
       percentage: "",
+      semester: "",
       examinationOptions: [],
     },
     {
@@ -225,6 +236,7 @@ const Form = ({ RID, goToLogin }) => {
       cyear: "",
       status: "",
       percentage: "",
+      semester: "",
       examinationOptions: [],
     },
     {
@@ -236,6 +248,7 @@ const Form = ({ RID, goToLogin }) => {
       cyear: "",
       status: "",
       percentage: "",
+      semester: "",
       examinationOptions: [],
     },
     {
@@ -247,6 +260,7 @@ const Form = ({ RID, goToLogin }) => {
       cyear: "",
       status: "",
       percentage: "",
+      semester: "",
       examinationOptions: [],
     },
   ]);
@@ -262,38 +276,31 @@ const Form = ({ RID, goToLogin }) => {
   };
   const handleSubmitEducationalQualification = async () => {
     try {
-      for (const row of rows) {
-        if (
+      const nonEmptyQualifications = rows.filter(
+        (row) =>
           row.examination ||
           row.subject ||
           row.board ||
           row.syear ||
           row.cyear ||
           row.status ||
-          row.percentage
-        ) {
-          if (
-            !row.examination ||
-            !row.subject ||
-            !row.board ||
-            !row.syear ||
-            !row.cyear ||
-            !row.status ||
-            !row.percentage
-          ) {
-            console.error("Please fill all fields in the row");
-            return;
-          }
-        }
+          row.percentage ||
+          (row.status === "Pursuing" && row.semester) // Include semester only if status is "Pursuing"
+      );
+
+      if (nonEmptyQualifications.length === 0) {
+        console.error("Please fill at least one educational qualification");
+        return;
       }
 
-      const educationalQualifications = rows.map((row) => ({
+      const educationalQualifications = nonEmptyQualifications.map((row) => ({
         examination: row.examination,
         subject: row.subject,
         board: row.board,
         syear: row.syear,
         cyear: row.cyear,
         status: row.status,
+        semester: row.status === "Pursuing" ? row.semester : "", // Include semester only for "Pursuing"
         percentage: row.percentage,
       }));
 
@@ -312,7 +319,6 @@ const Form = ({ RID, goToLogin }) => {
       console.error("Error saving educational qualification data:", error);
     }
   };
-
   const handleLogout = () => {
     window.alert("Logging Out");
     goToLogin();
@@ -622,6 +628,9 @@ const Form = ({ RID, goToLogin }) => {
                 <th>Year of Completion</th>
                 <th>Pursuing/Completed</th>
                 <th>Percentage</th>
+                {rows.some((row) => row.status === "Pursuing") && (
+                  <th>Semester</th>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -715,6 +724,23 @@ const Form = ({ RID, goToLogin }) => {
                         handleInputChange(index, "percentage", e.target.value)
                       }
                     />
+                  </td>
+                  <td>
+                    {row.status === "Pursuing" && (
+                      <select
+                        className="def_input select-option sizing1"
+                        value={row.semester}
+                        onChange={(e) =>
+                          handleInputChange(index, "semester", e.target.value)
+                        }>
+                        <option value="">Select Semester</option>
+                        {semesterOptions.map((semester) => (
+                          <option key={semester} value={semester}>
+                            {semester}
+                          </option>
+                        ))}
+                      </select>
+                    )}
                   </td>
                 </tr>
               ))}

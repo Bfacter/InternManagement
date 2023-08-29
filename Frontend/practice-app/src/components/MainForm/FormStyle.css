@@ -97,6 +97,9 @@
   .sizing{
     width:150px;
   }
+   .sizing1{
+    width:100px;
+  }
 
 .logout{
      display: flex ;
