@@ -6,12 +6,24 @@ router.post("/", async (req, res) => {
   try {
     const { RID, educationalQualifications } = req.body;
 
-    // Delete existing educational qualifications for the provided RID
     await EducationalQualification.deleteMany({ RID });
 
-    // Insert the new educational qualifications
+    const nonEmptyQualifications = educationalQualifications.filter(
+      (qualification) => {
+        return (
+          qualification.examination ||
+          qualification.subject ||
+          qualification.board ||
+          qualification.syear ||
+          qualification.cyear ||
+          qualification.status ||
+          qualification.percentage
+        );
+      }
+    );
+
     await EducationalQualification.insertMany(
-      educationalQualifications.map((qualification) => ({
+      nonEmptyQualifications.map((qualification) => ({
         RID,
         ...qualification,
       }))

@@ -10,7 +10,7 @@ const Form = ({ RID, goToLogin }) => {
   const [candidateData, setCandidateData] = useState({});
   const [previewMode, setPreviewMode] = useState(false);
   const [fileError, setFileError] = useState("");
-  const [examinationOptions, setExaminationOptions] = useState([]);
+
   const [AreaOptions, setAreaOptions] = useState([]);
   const [showSuccessPrompt, setShowSuccessPrompt] = useState(false);
 
@@ -144,22 +144,30 @@ const Form = ({ RID, goToLogin }) => {
     });
   };
   useEffect(() => {
-    fetchExaminationOptions();
-  }, []);
+    const fetchOptionsForRow = async (rowIndex) => {
+      try {
+        const response = await axios.get(
+          `http://localhost:4444/api/options?row=${rowIndex}`
+        );
+        return response.data.options;
+      } catch (error) {
+        console.error("Error fetching options:", error);
+        return [];
+      }
+    };
 
-  const fetchExaminationOptions = async () => {
-    try {
-      const response = await fetch("http://localhost:4444/api/options"); // Update with your backend URL
-      const data = await response.json();
-      setExaminationOptions(data.options);
-    } catch (error) {
-      console.error("Error fetching examination options:", error);
-    }
-  };
-  useEffect(() => {
-    fetchAreaOptions();
-  }, []);
+    const updateRowsWithExaminationOptions = async () => {
+      const updatedRows = await Promise.all(
+        rows.map(async (row, index) => ({
+          ...row,
+          examinationOptions: await fetchOptionsForRow(index),
+        }))
+      );
+      setRows(updatedRows);
+    };
 
+    updateRowsWithExaminationOptions();
+  }, []);
   const generateSYearOptions = () => {
     const currentYear = new Date().getFullYear();
     const years = [];
@@ -191,6 +199,10 @@ const Form = ({ RID, goToLogin }) => {
       console.error("Error fetching examination options:", error);
     }
   };
+  useEffect(() => {
+    fetchAreaOptions();
+  }, []);
+
   const [rows, setRows] = useState([
     // Initialize with 4 rows
     {
@@ -202,6 +214,7 @@ const Form = ({ RID, goToLogin }) => {
       cyear: "",
       status: "",
       percentage: "",
+      examinationOptions: [],
     },
     {
       sno: 2,
@@ -212,6 +225,7 @@ const Form = ({ RID, goToLogin }) => {
       cyear: "",
       status: "",
       percentage: "",
+      examinationOptions: [],
     },
     {
       sno: 3,
@@ -222,6 +236,7 @@ const Form = ({ RID, goToLogin }) => {
       cyear: "",
       status: "",
       percentage: "",
+      examinationOptions: [],
     },
     {
       sno: 4,
@@ -232,6 +247,7 @@ const Form = ({ RID, goToLogin }) => {
       cyear: "",
       status: "",
       percentage: "",
+      examinationOptions: [],
     },
   ]);
 
@@ -246,20 +262,43 @@ const Form = ({ RID, goToLogin }) => {
   };
   const handleSubmitEducationalQualification = async () => {
     try {
-      const educationalQualifications = rows.map((row) => {
-        return {
-          examination: row.examination,
-          subject: row.subject,
-          board: row.board,
-          syear: row.syear,
-          cyear: row.cyear,
-          status: row.status,
-          percentage: row.percentage,
-        };
-      });
+      for (const row of rows) {
+        if (
+          row.examination ||
+          row.subject ||
+          row.board ||
+          row.syear ||
+          row.cyear ||
+          row.status ||
+          row.percentage
+        ) {
+          if (
+            !row.examination ||
+            !row.subject ||
+            !row.board ||
+            !row.syear ||
+            !row.cyear ||
+            !row.status ||
+            !row.percentage
+          ) {
+            console.error("Please fill all fields in the row");
+            return;
+          }
+        }
+      }
+
+      const educationalQualifications = rows.map((row) => ({
+        examination: row.examination,
+        subject: row.subject,
+        board: row.board,
+        syear: row.syear,
+        cyear: row.cyear,
+        status: row.status,
+        percentage: row.percentage,
+      }));
 
       const educationalQualificationData = {
-        RID: RID,
+        RID: RID, // Replace with your RID
         educationalQualifications: educationalQualifications,
       };
 
@@ -598,7 +637,7 @@ const Form = ({ RID, goToLogin }) => {
                         handleInputChange(index, "examination", e.target.value)
                       }>
                       <option value="">Select Examination</option>
-                      {examinationOptions.map((option) => (
+                      {row.examinationOptions.map((option) => (
                         <option key={option} value={option}>
                           {option}
                         </option>
