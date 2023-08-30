@@ -3,6 +3,8 @@ import axios from "axios";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import "./FormStyle.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 import { getCurrentMonthPlusTwoOptions } from "../utils/dateUtils";
 
@@ -10,6 +12,13 @@ const Form = ({ RID, goToLogin }) => {
   const [candidateData, setCandidateData] = useState({});
   const [previewMode, setPreviewMode] = useState(false);
   const [fileError, setFileError] = useState("");
+  const currentYear = new Date().getFullYear();
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    return `${year}-${month}`;
+  };
+
   const semesterOptions = [
     "Sem1",
     "Sem2",
@@ -178,27 +187,6 @@ const Form = ({ RID, goToLogin }) => {
 
     updateRowsWithExaminationOptions();
   }, []);
-  const generateSYearOptions = () => {
-    const currentYear = new Date().getFullYear();
-    const years = [];
-
-    for (let i = currentYear; i >= currentYear - 10; i--) {
-      years.push(i.toString());
-    }
-
-    return years;
-  };
-
-  const generateCYearOptions = () => {
-    const currentYear = new Date().getFullYear();
-    const years = [];
-
-    for (let i = currentYear + 5; i >= currentYear - 8; i--) {
-      years.push(i.toString());
-    }
-
-    return years;
-  };
 
   const fetchAreaOptions = async () => {
     try {
@@ -285,7 +273,7 @@ const Form = ({ RID, goToLogin }) => {
           row.cyear ||
           row.status ||
           row.percentage ||
-          (row.status === "Pursuing" && row.semester) // Include semester only if status is "Pursuing"
+          (row.status === "Pursuing" && row.semester)
       );
 
       if (nonEmptyQualifications.length === 0) {
@@ -293,19 +281,26 @@ const Form = ({ RID, goToLogin }) => {
         return;
       }
 
-      const educationalQualifications = nonEmptyQualifications.map((row) => ({
-        examination: row.examination,
-        subject: row.subject,
-        board: row.board,
-        syear: row.syear,
-        cyear: row.cyear,
-        status: row.status,
-        semester: row.status === "Pursuing" ? row.semester : "", // Include semester only for "Pursuing"
-        percentage: row.percentage,
-      }));
+      const educationalQualifications = nonEmptyQualifications.map((row) => {
+        const qualification = {
+          examination: row.examination,
+          subject: row.subject,
+          board: row.board,
+          status: row.status,
+          percentage: row.percentage,
+          syear: row.syear,
+          cyear: row.cyear,
+        };
+
+        if (row.status === "Pursuing") {
+          qualification.semester = row.semester;
+        }
+
+        return qualification;
+      });
 
       const educationalQualificationData = {
-        RID: RID, // Replace with your RID
+        RID: RID,
         educationalQualifications: educationalQualifications,
       };
 
@@ -674,34 +669,34 @@ const Form = ({ RID, goToLogin }) => {
                     />
                   </td>
                   <td>
-                    <select
+                    <DatePicker
                       className="def_input select-option sizing"
-                      value={row.syear}
-                      onChange={(e) =>
-                        handleInputChange(index, "syear", e.target.value)
-                      }>
-                      <option value="">Select Year</option>
-                      {generateSYearOptions().map((year) => (
-                        <option key={year} value={year}>
-                          {year}
-                        </option>
-                      ))}
-                    </select>
+                      selected={row.syear ? new Date(`${row.syear}-01`) : null}
+                      onChange={(date) =>
+                        handleInputChange(index, "syear", formatDate(date))
+                      }
+                      showMonthDropdown
+                      showYearDropdown
+                      dropdownMode="select"
+                      minDate={new Date(`${currentYear - 10}-01`)}
+                      maxDate={new Date(`${currentYear}-12`)}
+                      dateFormat="yyyy-MM"
+                    />
                   </td>
                   <td>
-                    <select
+                    <DatePicker
                       className="def_input select-option sizing"
-                      value={row.cyear}
-                      onChange={(e) =>
-                        handleInputChange(index, "cyear", e.target.value)
-                      }>
-                      <option value="">Select Year</option>
-                      {generateCYearOptions().map((year) => (
-                        <option key={year} value={year}>
-                          {year}
-                        </option>
-                      ))}
-                    </select>
+                      selected={row.cyear ? new Date(`${row.cyear}-01`) : null}
+                      onChange={(date) =>
+                        handleInputChange(index, "cyear", formatDate(date))
+                      }
+                      showMonthDropdown
+                      showYearDropdown
+                      dropdownMode="select"
+                      minDate={new Date(`${currentYear - 8}-01`)}
+                      maxDate={new Date(`${currentYear + 5}-12`)}
+                      dateFormat="yyyy-MM"
+                    />
                   </td>
                   <td>
                     <select

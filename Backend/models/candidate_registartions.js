@@ -31,7 +31,7 @@ const candidateRegistrationsSchema = mongoose.Schema({
   },
   statusofregistration: {
     type: String,
-    default: "d",
+    default: "a",
     minlength: 1,
     maxlength: 1,
   },

@@ -3,7 +3,8 @@ const express = require("express");
 const router = express.Router();
 
 const examinationOptionsSets = [
-  ["Secondary(10th)", "Senior Secondary(12th)"],
+  ["Secondary(10th)"],
+  ["Senior Secondary(12th)"],
   [
     "B.A",
     "B.Arch",
@@ -19,6 +20,8 @@ const examinationOptionsSets = [
     "MBBS",
     "DIPLOMA",
     "BVSC",
+    "BHMS",
+    "BAMS",
     "OTHER",
   ],
   [
@@ -40,17 +43,10 @@ const examinationOptionsSets = [
     "PG DIPLOMA",
     "MVSC",
     "MCM",
-    "OTHER",
-  ],
-  [
     "P.HD/DOCTORATE",
-    "MPHIL",
-    "OTHER",
     "MPHIL",
     "PHD/Doctrate",
     "OTHER",
-    "BHMS",
-    "BAMS",
   ],
 ];
 

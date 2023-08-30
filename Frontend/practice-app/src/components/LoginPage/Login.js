@@ -25,7 +25,7 @@ const LoginForm = ({ className, goToForm, goToRegistration }) => {
 
       window.alert("Login Succesful!");
 
-      goToForm(response.data.RID);
+      goToForm(response.data.RID, response.data.statusofregistration);
     } catch (error) {
       if (error.response.status === 401) {
         if (error.response.data.message.includes("locked out")) {
@@ -39,18 +39,6 @@ const LoginForm = ({ className, goToForm, goToRegistration }) => {
     }
   };
 
-  // useEffect(() => {
-  //   const handleKeyPress = (e) => {
-  //     if (e.key === "Enter") {
-  //       handleSubmit(e);
-  //     }
-  //   };
-  //   document.addEventListener("keydown", handleKeyPress);
-  //   return () => {
-  //     document.removeEventListener("keydown", handleKeyPress);
-  //   };
-  // }, []);
-
   return (
     <div className="Mainloginpage">
       <div className={`side-bar ${className}`}>
@@ -61,6 +49,7 @@ const LoginForm = ({ className, goToForm, goToRegistration }) => {
             src="/images/rectangle-4.jpg"
           />
           <div className="div" />
+          <p className="Up">To Apply Online/ Print Application:</p>
           <form className="login" onSubmit={handleSubmit}>
             <label className="email-id">Email Id:</label>
             <input
@@ -98,6 +87,7 @@ const LoginForm = ({ className, goToForm, goToRegistration }) => {
                 <p className="lockout-message">{lockoutMessage}</p>
               )}
             </div>
+
             {/* INSTRUCTIONS AND GUIDELINES */}
             <div className="overlap2">
               <div className="divs" />
