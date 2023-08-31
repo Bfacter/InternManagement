@@ -23,8 +23,8 @@ const LoginForm = ({ className, goToForm, goToRegistration }) => {
         formData
       );
 
-      window.alert("Login Succesful!");
-
+      window.alert("Login Successful!");
+      saveLoginData(formData.Email, true);
       goToForm(response.data.RID, response.data.statusofregistration);
     } catch (error) {
       if (error.response.status === 401) {
@@ -32,10 +32,28 @@ const LoginForm = ({ className, goToForm, goToRegistration }) => {
           setLockoutMessage(error.response.data.message);
         } else {
           window.alert("Invalid Credentials");
+          saveLoginData(formData.Email, false);
         }
       } else {
         window.alert("Error logging in:");
       }
+    }
+  };
+  const saveLoginData = async (email, success) => {
+    try {
+      const ipAddressResponse = await axios.get(
+        "https://api64.ipify.org?format=json"
+      );
+      const ipAddress = ipAddressResponse.data.ip;
+
+      await axios.post("http://localhost:4444/save-login-data", {
+        email,
+        success,
+        ipAddress,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      console.error("Error saving login data:", error);
     }
   };
 

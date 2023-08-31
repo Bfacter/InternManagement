@@ -350,6 +350,9 @@ const Form = ({ RID, goToLogin }) => {
 
       await axios.post("http://localhost:4444/p", formDataToSend, config);
       await handleSubmitEducationalQualification();
+      await axios.post(
+        `http://localhost:4444/update-registration-status/${RID}`
+      );
       console.log("Registration successful!");
       setShowSuccessPrompt(true);
 
