@@ -10,7 +10,9 @@ router.get("/:RID", async (req, res) => {
     const candidate = await candidateRegistered.findOne({ RID: RID });
     const formCandidate = await candidateForm.findOne({ RID: RID });
     const educationCandidate = await educationData.find({ RID: RID });
-    console.log(candidate, formCandidate, educationData);
+    console.log(candidate, formCandidate, educationCandidate);
+
+    res.json({ candidate, formCandidate, educationCandidate });
   } catch (error) {
     console.error("Error fetching data:", error);
     res.status(500).json({ error: "An error occurred" });

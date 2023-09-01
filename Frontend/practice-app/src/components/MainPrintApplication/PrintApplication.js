@@ -5,6 +5,13 @@ import "jspdf-autotable";
 const PrintApplication = ({ RID, goToLogin }) => {
   const [applicationData, setApplicationData] = useState({});
 
+  const convertToFormattedDate = (isoDate) => {
+    const date = new Date(isoDate);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
   const handleLogout = () => {
     window.alert("Logging Out");
     goToLogin();
@@ -82,7 +89,6 @@ const PrintApplication = ({ RID, goToLogin }) => {
 
     pdf.save("application_form.pdf");
   };
-
   useEffect(() => {
     // Fetch data from the backend using the RID
     fetch(`http://localhost:4444/printapplication/${RID}`)
@@ -92,13 +98,6 @@ const PrintApplication = ({ RID, goToLogin }) => {
       .catch((error) => console.error("Error fetching data:", error));
   }, [RID]);
   console.log(applicationData);
-  const convertToFormattedDate = (isoDate) => {
-    const date = new Date(isoDate);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
-  };
 
   return (
     <div>

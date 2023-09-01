@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const FontSizeControl = () => {
-  const [fontSize, setFontSize] = useState(16); // Initial font size
+  const [setFontSize] = useState(16); // Initial font size
 
   const increaseFontSize = () => {
     setFontSize((prevFontSize) => prevFontSize + 2); // Increase font size by 2
