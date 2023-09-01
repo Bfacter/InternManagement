@@ -6,6 +6,11 @@ const formSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
+  RegNo: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   title: {
     type: String,
     required: true,
@@ -35,7 +40,6 @@ const formSchema = mongoose.Schema({
   },
   phone: {
     type: Number,
-    required: true,
   },
   mobile: {
     type: Number,
@@ -43,13 +47,17 @@ const formSchema = mongoose.Schema({
   },
   resume: {
     type: String,
-    // required: true,
+    required: true,
   },
   desiredMonth: {
     type: String,
     required: true,
   },
   AreaOptions: {
+    type: String,
+    required: true,
+  },
+  PlaceofSubmission: {
     type: String,
     required: true,
   },

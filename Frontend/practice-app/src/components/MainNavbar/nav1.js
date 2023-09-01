@@ -1,6 +1,5 @@
 import React from "react";
 import "./NavStyle.css";
-import FontSizeControl from "./FontSizeControl";
 
 const PageNav = () => {
   return (
@@ -59,9 +58,7 @@ const PageNav = () => {
               </a>
             </div>
           </div>
-          <div className="navbar-left">
-            <FontSizeControl />
-          </div>
+          <div className="navbar-left"></div>
         </div>
         <div className="line-2">
           <div>

@@ -5,13 +5,17 @@ import "react-phone-input-2/lib/style.css";
 import "./FormStyle.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
 import { getCurrentMonthPlusTwoOptions } from "../utils/dateUtils";
+import { isFNameValid } from "../utils/typeCheckUtil";
 
 const Form = ({ RID, goToLogin }) => {
   const [candidateData, setCandidateData] = useState({});
   const [previewMode, setPreviewMode] = useState(false);
   const [fileError, setFileError] = useState("");
+  const [mobileValidationError, setMobileValidationError] = useState("");
+  const [phoneValidationError, setPhoneValidationError] = useState("");
+  const [pincodeValidationError, setPincodeValidationError] = useState("");
+
   const currentYear = new Date().getFullYear();
   const formatDate = (date) => {
     const year = date.getFullYear();
@@ -29,7 +33,33 @@ const Form = ({ RID, goToLogin }) => {
     "Sem7",
     "Sem8",
   ];
-
+  const validateMobileNo = (value) => {
+    if (value.length !== 12) {
+      setMobileValidationError("Mobile number should be 10 digits.");
+      return false;
+    } else {
+      setMobileValidationError("");
+      return true;
+    }
+  };
+  const validatePhoneNo = (value) => {
+    if (value.length !== 12) {
+      setPhoneValidationError("Phone number should be 10 digits.");
+      return false;
+    } else {
+      setPhoneValidationError("");
+      return true;
+    }
+  };
+  const validatePincodeNo = (value) => {
+    if (value.length !== 6) {
+      setPincodeValidationError("Pincode should be 6 digits.");
+      return false;
+    } else {
+      setPincodeValidationError("");
+      return true;
+    }
+  };
   const [AreaOptions, setAreaOptions] = useState([]);
   const [showSuccessPrompt, setShowSuccessPrompt] = useState(false);
 
@@ -47,6 +77,7 @@ const Form = ({ RID, goToLogin }) => {
     resume: null,
     desiredMonth: "",
     AreaOptions: "",
+    placeOfSubmission: "",
   });
   useEffect(() => {
     const fetchData = async () => {
@@ -99,12 +130,14 @@ const Form = ({ RID, goToLogin }) => {
       ...formData,
       [name]: newValue,
     });
+    validatePincodeNo(value);
   };
   const handlePhoneChange = (value) => {
     setFormData({
       ...formData,
       phone: value,
     });
+    validatePhoneNo(value);
   };
 
   const handleMobileChange = (value) => {
@@ -112,6 +145,7 @@ const Form = ({ RID, goToLogin }) => {
       ...formData,
       mobile: value,
     });
+    validateMobileNo(value);
   };
 
   const handleFileChange = (e) => {
@@ -252,16 +286,117 @@ const Form = ({ RID, goToLogin }) => {
       examinationOptions: [],
     },
   ]);
-
+  const [cyearErrors, setCYearErrors] = useState(
+    Array(rows.length).fill(false)
+  );
+  const [cyearErrorMessages, setCYearErrorMessages] = useState(
+    Array(rows.length).fill("")
+  );
+  const [percentageErrors, setPercentageErrors] = useState(
+    Array(rows.length).fill(false)
+  );
+  const [percentageErrorMessages, setPercentageErrorMessages] = useState(
+    Array(rows.length).fill("")
+  );
+  const [boardSubjectErrors, setBoardSubjectErrors] = useState(
+    Array(rows.length).fill(false)
+  );
+  const [boardSubjectErrorMessages, setBoardSubjectErrorMessages] = useState(
+    Array(rows.length).fill("")
+  );
   const handleInputChange = (index, field, value) => {
     const updatedRows = rows.map((row, i) => {
       if (i === index) {
+        // Add character-only validation for "board" and "subject" fields
+        if (field === "board" || field === "subject") {
+          // Use a regular expression to check if the value contains only letters
+          const validCharactersRegex = /^[A-Za-z]+$/;
+          if (!validCharactersRegex.test(value)) {
+            const errorMessage = "Only characters (letters) are allowed.";
+            const updatedErrors = [...boardSubjectErrors];
+            updatedErrors[index] = true; // Set the error flag for this field
+            setBoardSubjectErrors(updatedErrors);
+            setBoardSubjectErrorMessages((prevMessages) => {
+              const messages = [...prevMessages];
+              messages[index] = errorMessage;
+              return messages;
+            });
+          } else {
+            // Clear the error if the input is valid
+            const updatedErrors = [...boardSubjectErrors];
+            updatedErrors[index] = false; // Clear the error flag for this field
+            setBoardSubjectErrors(updatedErrors);
+            setBoardSubjectErrorMessages((prevMessages) => {
+              const messages = [...prevMessages];
+              messages[index] = "";
+              return messages;
+            });
+          }
+        }
+
         return { ...row, [field]: value };
       }
       return row;
     });
+
+    if (field === "percentage") {
+      const percentage = parseFloat(value);
+
+      // Check if the entered value is a valid percentage
+      if (isNaN(percentage) || percentage < 0 || percentage > 100) {
+        const errorMessage = "Percentage must be between 0 and 100";
+        const updatedErrors = [...percentageErrors];
+        updatedErrors[index] = true;
+        setPercentageErrors(updatedErrors);
+        setPercentageErrorMessages((prevMessages) => {
+          const messages = [...prevMessages];
+          messages[index] = errorMessage;
+          return messages;
+        });
+      } else {
+        // Clear the error if the input is valid
+        const updatedErrors = [...percentageErrors];
+        updatedErrors[index] = false;
+        setPercentageErrors(updatedErrors);
+        setPercentageErrorMessages((prevMessages) => {
+          const messages = [...prevMessages];
+          messages[index] = "";
+          return messages;
+        });
+      }
+    }
+    if (field === "cyear") {
+      const cyear = parseInt(value, 10);
+      const syear = parseInt(updatedRows[index].syear, 10);
+
+      // Check if cyear is less than or equal to syear
+      if (cyear <= syear) {
+        const errorMessage =
+          "Year of completion must be greater than Year of Joining by atleast 1 year";
+        const updatedErrors = [...cyearErrors];
+        updatedErrors[index] = true;
+        setCYearErrors(updatedErrors);
+        setCYearErrorMessages((prevMessages) => {
+          const messages = [...prevMessages];
+          messages[index] = errorMessage;
+          return messages;
+        });
+      } else {
+        // Clear the error if the input is valid
+        const updatedErrors = [...cyearErrors];
+        updatedErrors[index] = false;
+        setCYearErrors(updatedErrors);
+        setCYearErrorMessages((prevMessages) => {
+          const messages = [...prevMessages];
+          messages[index] = "";
+          return messages;
+        });
+      }
+    }
+
     setRows(updatedRows);
   };
+
   const handleSubmitEducationalQualification = async () => {
     try {
       const nonEmptyQualifications = rows.filter(
@@ -337,6 +472,7 @@ const Form = ({ RID, goToLogin }) => {
       formDataToSend.append("mobile", formData.mobile);
       formDataToSend.append("desiredMonth", formData.desiredMonth);
       formDataToSend.append("AreaOptions", formData.AreaOptions);
+      formDataToSend.append("PlaceofSubmission", formData.placeOfSubmission);
 
       // Append the resume file to the FormData object
       formDataToSend.append("resume", formData.resume);
@@ -353,7 +489,6 @@ const Form = ({ RID, goToLogin }) => {
       await axios.post(
         `http://localhost:4444/update-registration-status/${RID}`
       );
-      console.log("Registration successful!");
       setShowSuccessPrompt(true);
 
       // Redirect after 3 seconds
@@ -362,7 +497,9 @@ const Form = ({ RID, goToLogin }) => {
         goToLogin(); // Redirect to login page
       }, 3000);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      alert(
+        "Error in submitting data. Please ensure you have filled all required fields."
+      );
     }
   };
 
@@ -464,7 +601,7 @@ const Form = ({ RID, goToLogin }) => {
               className="def_input"
               type="text"
               name="fathersname"
-              onChange={handleChange}
+              onChange={namehandleChange}
               value={formData.fathersname}
               required
             />
@@ -537,14 +674,23 @@ const Form = ({ RID, goToLogin }) => {
             {previewMode ? (
               <span>{formData.pincode}</span>
             ) : (
-              <input
-                className="def_input"
-                type="text"
-                name="pincode"
-                onChange={pincodeHandleChange}
-                value={formData.pincode}
-                required
-              />
+              <>
+                <input
+                  className="def_input"
+                  type="text"
+                  name="pincode"
+                  onChange={pincodeHandleChange}
+                  value={formData.pincode}
+                  required
+                />
+                {pincodeValidationError && (
+                  <span
+                    style={{ fontSize: "12px", color: "Red" }}
+                    className="error-message">
+                    {pincodeValidationError}
+                  </span>
+                )}
+              </>
             )}
           </div>
         </div>
@@ -555,15 +701,23 @@ const Form = ({ RID, goToLogin }) => {
             {previewMode ? (
               <span>{formData.phone}</span>
             ) : (
-              <PhoneInput
-                class="def_input"
-                name="phone"
-                country={"in"}
-                onlyCountries={["in"]}
-                onChange={handlePhoneChange}
-                value={formData.phone}
-                required
-              />
+              <>
+                <PhoneInput
+                  class="def_input"
+                  name="phone"
+                  country={"in"}
+                  onlyCountries={["in"]}
+                  onChange={handlePhoneChange}
+                  value={formData.phone}
+                />
+                {phoneValidationError && (
+                  <span
+                    style={{ fontSize: "12px", color: "Red" }}
+                    className="error-message">
+                    {phoneValidationError}
+                  </span>
+                )}
+              </>
             )}
           </div>
           <div className="field">
@@ -571,15 +725,24 @@ const Form = ({ RID, goToLogin }) => {
             {previewMode ? (
               <span>{formData.mobile}</span>
             ) : (
-              <PhoneInput
-                class="def_input"
-                name="mobile"
-                country={"in"}
-                onlyCountries={["in"]}
-                onChange={handleMobileChange}
-                value={formData.mobile}
-                required
-              />
+              <>
+                <PhoneInput
+                  class="def_input"
+                  name="mobile"
+                  country={"in"}
+                  onlyCountries={["in"]}
+                  onChange={handleMobileChange}
+                  value={formData.mobile}
+                  required
+                />
+                {mobileValidationError && (
+                  <span
+                    style={{ fontSize: "12px", color: "Red" }}
+                    className="error-message">
+                    {mobileValidationError}
+                  </span>
+                )}
+              </>
             )}
           </div>
         </div>
@@ -660,6 +823,11 @@ const Form = ({ RID, goToLogin }) => {
                         handleInputChange(index, "subject", e.target.value)
                       }
                     />
+                    {boardSubjectErrors[index] && (
+                      <div className="error-message">
+                        {boardSubjectErrorMessages[index]}
+                      </div>
+                    )}
                   </td>
                   <td>
                     <input
@@ -670,6 +838,11 @@ const Form = ({ RID, goToLogin }) => {
                         handleInputChange(index, "board", e.target.value)
                       }
                     />
+                    {boardSubjectErrors[index] && (
+                      <div className="error-message">
+                        {boardSubjectErrorMessages[index]}
+                      </div>
+                    )}
                   </td>
                   <td>
                     <DatePicker
@@ -681,6 +854,7 @@ const Form = ({ RID, goToLogin }) => {
                       showMonthDropdown
                       showYearDropdown
                       dropdownMode="select"
+                      showMonthYearPicker
                       minDate={new Date(`${currentYear - 10}-01`)}
                       maxDate={new Date(`${currentYear}-12`)}
                       dateFormat="yyyy-MM"
@@ -688,18 +862,28 @@ const Form = ({ RID, goToLogin }) => {
                   </td>
                   <td>
                     <DatePicker
-                      className="def_input select-option sizing"
+                      className={`def_input select-option sizing ${
+                        cyearErrors[index] ? "error" : ""
+                      }`}
                       selected={row.cyear ? new Date(`${row.cyear}-01`) : null}
                       onChange={(date) =>
                         handleInputChange(index, "cyear", formatDate(date))
                       }
                       showMonthDropdown
                       showYearDropdown
+                      showMonthYearPicker
                       dropdownMode="select"
                       minDate={new Date(`${currentYear - 8}-01`)}
                       maxDate={new Date(`${currentYear + 5}-12`)}
                       dateFormat="yyyy-MM"
                     />
+                    {cyearErrors[index] && (
+                      <p
+                        style={{ fontSize: "12px", color: "Red" }}
+                        className="error-message">
+                        {cyearErrorMessages[index]}
+                      </p>
+                    )}
                   </td>
                   <td>
                     <select
@@ -715,13 +899,22 @@ const Form = ({ RID, goToLogin }) => {
                   </td>
                   <td>
                     <input
-                      className="def_input sizing "
+                      className={`def_input sizing ${
+                        percentageErrors[index] ? "error" : ""
+                      }`}
                       type="text"
                       value={row.percentage}
                       onChange={(e) =>
                         handleInputChange(index, "percentage", e.target.value)
                       }
                     />
+                    {percentageErrors[index] && (
+                      <p
+                        style={{ fontSize: "10px", color: "Red" }}
+                        className="error-message">
+                        {percentageErrorMessages[index]}
+                      </p>
+                    )}
                   </td>
                   <td>
                     {row.status === "Pursuing" && (
@@ -808,6 +1001,23 @@ const Form = ({ RID, goToLogin }) => {
 
           <div style={{ fontSize: "16px", marginTop: "3%" }}>
             Date: {new Date().toLocaleDateString()}
+          </div>
+          <div className="field flex">
+            <div>Place of Submission:</div>
+            {previewMode ? (
+              <span>{formData.placeOfSubmission}</span>
+            ) : (
+              <div>
+                <input
+                  className="def_input"
+                  type="text"
+                  name="placeOfSubmission"
+                  onChange={namehandleChange}
+                  value={formData.placeOfSubmission}
+                  required
+                />
+              </div>
+            )}
           </div>
         </div>
         <div className="field border">

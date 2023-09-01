@@ -15,6 +15,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+const generateUniqueNumber = () => {
+  return Math.floor(10000000 + Math.random() * 90000000);
+};
+
 router.post("/", upload.single("resume"), async (req, res, next) => {
   try {
     const {
@@ -30,12 +34,22 @@ router.post("/", upload.single("resume"), async (req, res, next) => {
       mobile,
       desiredMonth,
       AreaOptions,
+      PlaceofSubmission,
     } = req.body;
 
     const resumeFileName = req.file.filename;
+    // Generate the unique 8-digit number
+    const uniqueNumber = generateUniqueNumber();
+
+    // Get the current year
+    const currentYear = new Date().getFullYear();
+
+    // Construct the RegNo based on the format
+    const RegNo = `NITI${currentYear}${RID}${uniqueNumber}`;
 
     const newFormEntry = new formDetails({
       RID,
+      RegNo,
       title,
       fathersname,
       address1,
@@ -48,6 +62,7 @@ router.post("/", upload.single("resume"), async (req, res, next) => {
       resume: resumeFileName,
       desiredMonth,
       AreaOptions,
+      PlaceofSubmission,
     });
 
     await newFormEntry.save();

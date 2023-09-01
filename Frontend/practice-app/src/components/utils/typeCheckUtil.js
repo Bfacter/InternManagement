@@ -1,5 +1,5 @@
 export const isFNameValid = (name) => {
-  const nameRegex = /^[A-Z][a-z\s]*$/;
+  const nameRegex = /^[a-zA-Z\s]*$/;
   return nameRegex.test(name);
 };
 export const isAgeVaild = (Dob) => {

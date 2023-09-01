@@ -1,7 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const connectDB = require("./connection/mongooseconnection");
-const corsMiddleware = require("./middlewares/registrationscors");
 const cors = require("cors");
 const registrationRoutes = require("./routes/registrationroute");
 const loginRoute = require("./routes/loginroute");

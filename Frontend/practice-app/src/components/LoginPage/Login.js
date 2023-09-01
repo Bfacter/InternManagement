@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./LoginStyle.css";
+import { isEmailValid } from "../utils/typeCheckUtil";
 const LoginForm = ({ className, goToForm, goToRegistration }) => {
   const [formData, setFormData] = useState({
     Email: "",
@@ -14,9 +15,29 @@ const LoginForm = ({ className, goToForm, goToRegistration }) => {
       [name]: value,
     });
   };
+  const emailHandleChange = (e) => {
+    const { name, value } = e.target;
+
+    // Define the email regex pattern
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,4}$/;
+
+    // Check if the entered email matches the regex pattern
+    const isValidEmail = emailRegex.test(value);
+
+    setFormData({
+      ...formData,
+      [name]: value,
+      emailError: isValidEmail ? "" : "Invalid email format", // Set an error message if the email is invalid
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!isEmailValid(formData.Email)) {
+      // Show an error message for invalid email format
+      window.alert("Invalid Email Format");
+      return; // Don't submit the form
+    }
     try {
       const response = await axios.post(
         "http://localhost:4444/login",
@@ -71,13 +92,14 @@ const LoginForm = ({ className, goToForm, goToRegistration }) => {
           <form className="login" onSubmit={handleSubmit}>
             <label className="email-id">Email Id:</label>
             <input
-              className="rectangle-2"
+              className={`rectangle-2 ${formData.emailError ? "error" : ""}`}
               type="email"
               name="Email"
               value={formData.Email}
-              onChange={handleChange}
+              onChange={emailHandleChange}
               required
             />
+
             <br />
             <label className="password">Password:</label>
             <input

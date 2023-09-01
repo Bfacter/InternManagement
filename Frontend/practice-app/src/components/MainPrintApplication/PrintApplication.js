@@ -29,6 +29,7 @@ const PrintApplication = ({ RID, goToLogin }) => {
     pdf.text("Personal Information:", 10, 40);
 
     const personalInfoFields = [
+      `RegNo: ${applicationData.formCandidate?.RegNo}`,
       `Title: ${applicationData.formCandidate?.title}`,
       `Name: ${applicationData.candidate?.Fname}`,
       `Email: ${applicationData.candidate?.Email}`,
@@ -112,6 +113,7 @@ const PrintApplication = ({ RID, goToLogin }) => {
         </h1>
       </div>
       <div className="application-data">
+        <p>RegNo: {applicationData.formCandidate?.RegNo}</p>
         <p>Title: {applicationData.formCandidate?.title}</p>
         <p>Name: {applicationData.candidate?.Fname}</p>
         <p>Email: {applicationData.candidate?.Email}</p>

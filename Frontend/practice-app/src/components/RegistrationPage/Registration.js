@@ -31,6 +31,14 @@ const RegistrationForm = ({ goToLogin }) => {
       [name]: value,
     });
   };
+  const namehandleChange = (e) => {
+    const { name, value } = e.target;
+    const newValue = value.replace(/[^a-zA-Z ]/g, "");
+    setFormData({
+      ...formData,
+      [name]: newValue,
+    });
+  };
 
   // Validate the Full Name when the user leaves the Fname field
   const handleFNameBlur = () => {
@@ -138,7 +146,7 @@ const RegistrationForm = ({ goToLogin }) => {
               id="Fname"
               name="Fname"
               value={formData.Fname}
-              onChange={handleChange}
+              onChange={namehandleChange}
               onBlur={handleFNameBlur}
               required
             />
