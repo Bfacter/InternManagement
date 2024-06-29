@@ -80,7 +80,7 @@ const LoginForm = ({ className, goToForm, goToRegistration }) => {
 
   return (
     <div className="Mainloginpage">
-      <div className={`side-bar ${className}`}>
+      <div>
         <div className="overlap">
           <img
             className="rectangle"
